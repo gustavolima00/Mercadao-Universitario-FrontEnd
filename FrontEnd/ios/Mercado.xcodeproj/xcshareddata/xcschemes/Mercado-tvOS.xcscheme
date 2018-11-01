@@ -29,9 +29,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-               BuildableName = "FrontEnd-tvOS.app"
-               BlueprintName = "FrontEnd-tvOS"
-               ReferencedContainer = "container:FrontEnd.xcodeproj">
+               BuildableName = "Mercado-tvOS.app"
+               BlueprintName = "Mercado-tvOS"
+               ReferencedContainer = "container:Mercado.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -43,9 +43,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2D02E48F1E0B4A5D006451C7"
-               BuildableName = "FrontEnd-tvOSTests.xctest"
-               BlueprintName = "FrontEnd-tvOSTests"
-               ReferencedContainer = "container:FrontEnd.xcodeproj">
+               BuildableName = "Mercado-tvOSTests.xctest"
+               BlueprintName = "Mercado-tvOSTests"
+               ReferencedContainer = "container:Mercado.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -61,9 +61,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2D02E48F1E0B4A5D006451C7"
-               BuildableName = "FrontEnd-tvOSTests.xctest"
-               BlueprintName = "FrontEnd-tvOSTests"
-               ReferencedContainer = "container:FrontEnd.xcodeproj">
+               BuildableName = "Mercado-tvOSTests.xctest"
+               BlueprintName = "Mercado-tvOSTests"
+               ReferencedContainer = "container:Mercado.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -71,9 +71,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-            BuildableName = "FrontEnd-tvOS.app"
-            BlueprintName = "FrontEnd-tvOS"
-            ReferencedContainer = "container:FrontEnd.xcodeproj">
+            BuildableName = "Mercado-tvOS.app"
+            BlueprintName = "Mercado-tvOS"
+            ReferencedContainer = "container:Mercado.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -94,9 +94,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-            BuildableName = "FrontEnd-tvOS.app"
-            BlueprintName = "FrontEnd-tvOS"
-            ReferencedContainer = "container:FrontEnd.xcodeproj">
+            BuildableName = "Mercado-tvOS.app"
+            BlueprintName = "Mercado-tvOS"
+            ReferencedContainer = "container:Mercado.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -113,9 +113,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-            BuildableName = "FrontEnd-tvOS.app"
-            BlueprintName = "FrontEnd-tvOS"
-            ReferencedContainer = "container:FrontEnd.xcodeproj">
+            BuildableName = "Mercado-tvOS.app"
+            BlueprintName = "Mercado-tvOS"
+            ReferencedContainer = "container:Mercado.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

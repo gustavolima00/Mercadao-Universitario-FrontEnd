@@ -1,4 +1,4 @@
-package com.frontend;
+package com.mercado;
 
 import android.app.Application;
 
