@@ -4,13 +4,11 @@ import {
     StyleSheet,
     Alert,
     FlatList,
-    ActivityIndicator,
 } from "react-native";
 import { 
     Container, 
     Button, 
     Text, 
-    Spinner,
 } from 'native-base';
 import Field from './components/Field';
 
@@ -45,12 +43,12 @@ class LoginScreen extends Component {
             //console.log(JSON.stringify(responseJson));
             //Campo de username
             if (responseJson.username != undefined){
-                this.setState({ email_field_alerts: responseJson.username})
-                this.setState({ email_field_is_bad: true })
+                this.setState({ username_field_alerts: responseJson.username})
+                this.setState({ username_field_is_bad: true })
             }
             else{
-                this.setState({ email_field_alerts: ['']})
-                this.setState({ email_field_is_bad: false })
+                this.setState({ username_field_alerts: ['']})
+                this.setState({ username_field_is_bad: false })
             }
 
             //Campo de password
@@ -104,8 +102,8 @@ class LoginScreen extends Component {
                     />
                     <Field
                         placeholder={"Password"}
-                        badInput={this.state.email_field_is_bad}
-                        fieldAlert={this.state.email_field_alerts}
+                        badInput={this.state.password_field_is_bad}
+                        fieldAlert={this.state.password_field_alerts}
                         keyExtractor={'password'}
                         onChangeText={(password) => this.setState({password})}
                         secureTextEntry

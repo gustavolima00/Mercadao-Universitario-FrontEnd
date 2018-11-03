@@ -1,14 +1,16 @@
 import React, { Component } from "react";
-import { View, StyleSheet} from "react-native";
+import { 
+    View, 
+    StyleSheet,
+    FlatList,
+} from "react-native";
 import { 
     Container, 
     Button, 
     Text, 
-    Label,
-    Input,
-    Item,
     Header,
 } from 'native-base';
+import Field from './components/Field';
 
 class SignUpScreen extends Component {
     constructor(props) {
@@ -20,45 +22,131 @@ class SignUpScreen extends Component {
           non_field_alert: ['']
         };
     }
+    register = async () => {
+        const domain = 'IP';
+        var registration_path = `http://${domain}/rest-auth/registration/`;
+        fetch(registration_path,{
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+          'email': this.state.email,
+          'username': this.state.username,
+          'password1': this.state.password,
+          'password2': this.state.password,
+  
+        }),
+    })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      console.log(responseJson);
+      //Campo de email
+      if (responseJson.email != undefined){
+        this.setState({ email_field_alerts: responseJson.email})
+        this.setState({ email_field_is_bad: true })
+      }
+      else{
+        this.setState({ email_field_alerts: ['']})
+        this.setState({ email_field_is_bad: false })
+      }
+      //Campo se username
+      if (responseJson.username != undefined){
+        this.setState({ username_field_alerts: responseJson.username})
+        this.setState({ username_field_is_bad: true })
+      }
+      else{
+        this.setState({ email_field_alerts: ['']})
+        this.setState({ email_field_is_bad: false })
+      }
+      //Campo de password
+      if (responseJson.password1 != undefined){
+        this.setState({ password_field_alerts: responseJson.password1})
+        this.setState({ password_field_is_bad: true })
+      }
+      else{
+        this.setState({ password_field_alerts: ['']})
+        this.setState({ password_field_is_bad: false })
+      }
+      //Sem campo
+      if (responseJson.non_field_errors != undefined){
+        this.setState({ non_field_alert: responseJson.non_field_errors})
+      }
+      else{
+        this.setState({ non_field_alert: ['']})
+      }
+      //Sucesso
+     if (responseJson.token != undefined ||
+         responseJson.key != undefined){
+          Alert.alert("Conta criada com sucesso!");
+          this.props.navigation.navigate('LoginScreen') //mudei aqui de WelcomeScreen pra LoginScreen
+        }
+     })
+  
+     .catch( err => {
+       if (typeof err.text === 'function') {
+         err.text().then(errorMessage => {
+           this.props.dispatch(displayTheError(errorMessage))
+         });
+       } else {
+         Alert.alert("Erro na conexão.");
+         console.log(err)
+       }
+     });
+    }
 
     render() {
         return (
             <Container style={styles.container}>
-                <Header/>
-                <View style={styles.fields}> 
-                    <Item stackedLabel>
-                        <Label>Username</Label>
-                        <Input 
-                            onChangeText={(username) => this.setState({username})}
-                        />
-                    </Item>
-                    <Item stackedLabel >
-                        <Label>Email</Label>
-                        <Input 
-                            onChangeText={(email) => this.setState({email})}
-                        />
-                    </Item>
-                    <Item stackedLabel>
-                        <Label>Senha</Label>
-                        <Input 
-                            onChangeText={(passsword1) => this.setState({passsword1})}
-                            secureTextEntry
-                        />
-                    </Item>
-                    <Item stackedLabel>
-                        <Label>Repita sua senha</Label>
-                        <Input 
-                            onChangeText={(password2) => this.setState({password2})}
-                            secureTextEntry 
-                        />
-                    </Item>
+                <View style={styles.logo}>
+                    <Text>Registro</Text>
+                </View>
+                <View style={styles.fields}>
+                    <Field
+                        placeholder={"username"}
+                        badInput={this.state.username_field_is_bad}
+                        fieldAlert={this.state.username_field_alerts}
+                        keyExtractor={'username'}
+                        onChangeText={(username) => this.setState({username})}
+                    /> 
+                    <Field
+                        placeholder={"email"}
+                        badInput={this.state.email_field_is_bad}
+                        fieldAlert={this.state.email_field_alerts}
+                        keyExtractor={'email'}
+                        onChangeText={(email) => this.setState({email})}
+                    /> 
+                    <Field
+                        placeholder={"senha"}
+                        badInput={this.state.password1_field_is_bad}
+                        fieldAlert={this.state.password1_field_alerts}
+                        keyExtractor={'password1'}
+                        onChangeText={(password1) => this.setState({password1})}
+                        secureTextEntry
+                    
+                    />
+                    <Field
+                        placeholder={"repita sua senha"}
+                        badInput={this.state.password2_field_is_bad}
+                        fieldAlert={this.state.password2_field_alerts}
+                        keyExtractor={'password2'}
+                        onChangeText={(password2) => this.setState({password2})}
+                        secureTextEntry
+                    
+                    />
+                    <FlatList
+                      data={this.state.non_field_alert}
+                      renderItem={({item}) => <Text style ={{color: 'red'}}>{item}</Text>}
+                      keyExtractor={item => 'non_field_errors'}
+                    />
                     
                 </View>
                 <View style={styles.buttons}>
                     <Button 
                         block  
                         style={styles.button}
-                        onPress={() => this.props.navigation.navigate('SignUpScreen')}
+                        onPress={this.register}
                     >
                         <Text> Registro </Text>
                     </Button>
@@ -93,7 +181,7 @@ const styles = StyleSheet.create({
         paddingRight:20,
         alignItems: 'center',
         flexDirection: 'column',
-        justifyContent: 'space-between',
+        justifyContent: 'space-evenly',
     },
     field: {
         paddingBottom:20,

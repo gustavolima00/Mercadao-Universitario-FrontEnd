@@ -27,6 +27,9 @@ const AppStackNavigator = new StackNavigator({
   },
   SignUpScreen:{
     screen:SignUpScreen,
+    navigationOptions: ({ navigation }) => ({
+      header: null,
+    }),
   },
   MainScreen:{
     screen:MainScreen,
