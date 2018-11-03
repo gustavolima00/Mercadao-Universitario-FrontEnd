@@ -1,6 +1,10 @@
 default:
 	cd FrontEnd && yarn
 	cd FrontEnd && react-native run-android
+
+run:
+	cd FrontEnd && react-native run-android
+
 rename:
 	rm -rf FrontEnd/ios
 	rm -rf FrontEnd/android
