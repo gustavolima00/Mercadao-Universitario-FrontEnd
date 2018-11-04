@@ -6,11 +6,11 @@ import {
     FlatList,
 } from "react-native";
 import { 
-    Container, 
     Button, 
     Text, 
 } from 'native-base';
 import Field from './components/Field';
+import AwesomeAlert from 'react-native-awesome-alerts';
 
 class LoginScreen extends Component {
     constructor(props) {
@@ -19,11 +19,12 @@ class LoginScreen extends Component {
           username: '', password: '',
           username_field_is_bad: false, password_field_is_bad: false,
           username_field_alerts: [''], password_field_alerts: [''], 
-          non_field_alert: [''], loading:false,
+          non_field_alert: [''],
+          showLoading: false,
         };
     }
     login = async () => {
-        this.setState({ loading: true })
+        this.setState({ showLoading: true });
         const domain = 'IP';
         const login_path = `http://${domain}/rest-auth/token-obtain/`;
         console.log('fetching url:', login_path);
@@ -84,11 +85,11 @@ class LoginScreen extends Component {
                 console.log(err)
             }
         });
-        //this.setState({ loading: false });
+        this.setState({ showLoading: false });
     }
     render() {
         return (
-            <Container style={styles.container}>
+            <View style={styles.container}>
                 <View style={styles.logo}>
                     <Text>Login</Text>
                 </View>
@@ -138,8 +139,14 @@ class LoginScreen extends Component {
                         <Text> Visitante </Text>
                     </Button>
                 </View>
-                
-            </Container>
+                <AwesomeAlert
+                    show={this.state.showLoading}
+                    closeOnTouchOutside={false}
+                    closeOnHardwareBackPress={false}
+                    title={"Loading"}
+                    showProgress
+                />
+            </View>
         );
     }
 }

@@ -3,14 +3,15 @@ import {
     View, 
     StyleSheet,
     FlatList,
+    Alert,
 } from "react-native";
 import { 
     Container, 
     Button, 
     Text, 
-    Header,
 } from 'native-base';
 import Field from './components/Field';
+import AwesomeAlert from 'react-native-awesome-alerts';
 
 class SignUpScreen extends Component {
     constructor(props) {
@@ -19,10 +20,12 @@ class SignUpScreen extends Component {
           username: '', email: '', password1: '', password2: '',
           username_field_is_bad: false, email_field_is_bad: false, password1_field_is_bad: false, password2_field_is_bad: false,
           username_field_alerts: [''], email_field_alerts: [''], password1_field_alerts: [''], password2_field_alerts: [''], 
-          non_field_alert: ['']
+          non_field_alert: [''],
+          showLoading: false,
         };
     }
     register = async () => {
+        this.setState({ showLoading: true });
         const domain = 'IP';
         var registration_path = `http://${domain}/rest-auth/registration/`;
         fetch(registration_path,{
@@ -94,6 +97,7 @@ class SignUpScreen extends Component {
          console.log(err)
        }
      });
+     this.setState({ showLoading: false });
     }
 
     render() {
@@ -151,6 +155,13 @@ class SignUpScreen extends Component {
                         <Text> Registro </Text>
                     </Button>
                 </View>
+                <AwesomeAlert
+                    show={this.state.showLoading}
+                    closeOnTouchOutside={false}
+                    closeOnHardwareBackPress={false}
+                    title={"Loading"}
+                    showProgress
+                />
             </Container>
         );
     }
