@@ -1,37 +1,29 @@
-import * as React from 'react';
-import {StatusBar, Platform } from 'react-native';
-import {StackNavigator} from 'react-navigation'
+import React from 'react';
+import { RootNavigator } from './src/Routes';
+import { isSignedIn } from "./src/AuthMethods";
 
-import LoginScreen from './screens/LoginScreen'
-import SignUpScreen from './screens/SignUpScreen'
-import MainScreen from './screens/MainScreen'
+class App extends React.Component {
+  state = {
+    signed: false,
+    signLoaded: false,
+  }
 
+  componentWillMount(){
+    isSignedIn()
+    .then(res => this.setState({ signed: res, signLoaded: true }))
+    .catch(err => alert("Erro"));
+  }
 
-
-export default class App extends React.Component {
   render() {
-    return (
-      < AppStackNavigator />
-    );
+    const { signLoaded, signed } = this.state;
+
+    if (!signLoaded) {
+      return null;
+    }
+
+    const Layout = RootNavigator(signed);
+    return <Layout />;
   }
 }
 
-const AppStackNavigator = new StackNavigator({
-
-  LoginScreen:{
-    screen:LoginScreen,
-    navigationOptions: ({ navigation }) => ({
-      header: null,
-
-    }),
-  },
-  SignUpScreen:{
-    screen:SignUpScreen,
-    navigationOptions: ({ navigation }) => ({
-      header: null,
-    }),
-  },
-  MainScreen:{
-    screen:MainScreen,
-  },
-})
+export default App;

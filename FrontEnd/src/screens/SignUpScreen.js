@@ -10,8 +10,9 @@ import {
     Button, 
     Text, 
 } from 'native-base';
-import Field from './components/Field';
+import Field from './../components/Field';
 import AwesomeAlert from 'react-native-awesome-alerts';
+import { onSignIn } from "../AuthMethods";
 
 class SignUpScreen extends Component {
     constructor(props) {
@@ -37,8 +38,8 @@ class SignUpScreen extends Component {
           body: JSON.stringify({
           'email': this.state.email,
           'username': this.state.username,
-          'password1': this.state.password,
-          'password2': this.state.password,
+          'password1': this.state.password1,
+          'password2': this.state.password2,
   
         }),
     })
@@ -65,12 +66,20 @@ class SignUpScreen extends Component {
       }
       //Campo de password
       if (responseJson.password1 != undefined){
-        this.setState({ password_field_alerts: responseJson.password1})
-        this.setState({ password_field_is_bad: true })
+        this.setState({ password1_field_alerts: responseJson.password1})
+        this.setState({ password1_field_is_bad: true })
       }
       else{
         this.setState({ password_field_alerts: ['']})
         this.setState({ password_field_is_bad: false })
+      }
+      if (responseJson.password1 != undefined){
+        this.setState({ password2_field_alerts: responseJson.password2})
+        this.setState({ password2_field_is_bad: true })
+      }
+      else{
+        this.setState({ password2_field_alerts: ['']})
+        this.setState({ password2_field_is_bad: false })
       }
       //Sem campo
       if (responseJson.non_field_errors != undefined){
@@ -81,9 +90,9 @@ class SignUpScreen extends Component {
       }
       //Sucesso
      if (responseJson.token != undefined ||
-         responseJson.key != undefined){
-          Alert.alert("Conta criada com sucesso!");
-          this.props.navigation.navigate('LoginScreen') //mudei aqui de WelcomeScreen pra LoginScreen
+        responseJson.key != undefined){
+            onSignIn(responseJson.token);
+            this.props.navigation.navigate('MainScreen')
         }
      })
   

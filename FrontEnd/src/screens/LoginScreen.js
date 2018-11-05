@@ -9,8 +9,9 @@ import {
     Button, 
     Text, 
 } from 'native-base';
-import Field from './components/Field';
+import Field from './../components/Field';
 import AwesomeAlert from 'react-native-awesome-alerts';
+import { onSignIn } from "../AuthMethods";
 
 class LoginScreen extends Component {
     constructor(props) {
@@ -41,7 +42,7 @@ class LoginScreen extends Component {
         })
         .then((response) => response.json())
         .then((responseJson) => {
-            //console.log(JSON.stringify(responseJson));
+            console.log(JSON.stringify(responseJson));
             //Campo de username
             if (responseJson.username != undefined){
                 this.setState({ username_field_alerts: responseJson.username})
@@ -70,9 +71,9 @@ class LoginScreen extends Component {
                 this.setState({ non_field_alert: ['']})
             }
             //Sucesso
-            if (responseJson.token != undefined||
-                responseJson.key != undefined){
-                    this.props.navigation.navigate('TabHandler', {token:responseJson.token})
+            if (responseJson.token != undefined || responseJson.key != undefined){
+                onSignIn(responseJson.token);
+                this.props.navigation.navigate('MainScreen');
             }
         })
         .catch( err => {
