@@ -1,18 +1,18 @@
 import { createStackNavigator } from 'react-navigation';
-import LoginScreen from './screens/LoginScreen';
-import SignUpScreen from './screens/SignUpScreen';
+import Login from './screens/Login';
+import Registration from './screens/Registration';
 import MainScreen from './screens/MainScreen';
 
 const SignedOutRoutes = createStackNavigator({
-    LoginScreen:{
-        screen:LoginScreen,
+    Login:{
+        screen:Login,
         navigationOptions: ({ navigation }) => ({
         header: null,
 
         }),
     },
-    SignUpScreen:{
-        screen:SignUpScreen,
+    Registration:{
+        screen:Registration,
         navigationOptions: ({ navigation }) => ({
         header: null,
         }),

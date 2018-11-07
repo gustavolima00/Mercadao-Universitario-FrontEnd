@@ -10,11 +10,11 @@ import {
     Button, 
     Text, 
 } from 'native-base';
-import Field from './../components/Field';
+import Field from '../components/Field';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import { onSignIn } from "../AuthMethods";
 
-class SignUpScreen extends Component {
+class Registration extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -27,8 +27,9 @@ class SignUpScreen extends Component {
     }
     register = async () => {
         this.setState({ showLoading: true });
-        const domain = 'IP';
+        const domain = '192.168.1.16:8000';
         var registration_path = `http://${domain}/rest-auth/registration/`;
+        
         fetch(registration_path,{
           method: 'POST',
           credentials: 'include',
@@ -175,7 +176,7 @@ class SignUpScreen extends Component {
         );
     }
 }
-export default SignUpScreen;
+export default Registration;
 
 const styles = StyleSheet.create({
     container: {

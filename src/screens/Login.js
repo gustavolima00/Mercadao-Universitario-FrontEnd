@@ -9,11 +9,11 @@ import {
     Button, 
     Text, 
 } from 'native-base';
-import Field from './../components/Field';
+import Field from '../components/Field';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import { onSignIn } from "../AuthMethods";
 
-class LoginScreen extends Component {
+class Login extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -26,7 +26,7 @@ class LoginScreen extends Component {
     }
     login = async () => {
         this.setState({ showLoading: true });
-        const domain = 'IP';
+        const domain = '192.168.1.16:8000';
         const login_path = `http://${domain}/rest-auth/token-obtain/`;
         console.log('fetching url:', login_path);
 
@@ -151,7 +151,7 @@ class LoginScreen extends Component {
         );
     }
 }
-export default LoginScreen;
+export default Login;
 
 const styles = StyleSheet.create({
     container: {
