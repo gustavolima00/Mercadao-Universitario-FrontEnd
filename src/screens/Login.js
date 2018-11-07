@@ -12,6 +12,7 @@ import {
 import Field from '../components/Field';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import { onSignIn } from "../AuthMethods";
+import axios from 'axios';
 
 class Login extends Component {
     constructor(props) {
@@ -30,64 +31,59 @@ class Login extends Component {
         const login_path = `http://${domain}/rest-auth/token-obtain/`;
         console.log('fetching url:', login_path);
 
-        fetch(login_path, {
-            method: 'POST',
-            headers: {
-            'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                'username': this.state.username,
-                'password': this.state.password,
-            }),
+        var self = this;
+        axios.post(login_path ,{
+            'username': this.state.username,
+            'password': this.state.password,
         })
-        .then((response) => response.json())
-        .then((responseJson) => {
-            console.log(JSON.stringify(responseJson));
-            //Campo de username
-            if (responseJson.username != undefined){
-                this.setState({ username_field_alerts: responseJson.username})
-                this.setState({ username_field_is_bad: true })
-            }
-            else{
-                this.setState({ username_field_alerts: ['']})
-                this.setState({ username_field_is_bad: false })
-            }
-
-            //Campo de password
-            if (responseJson.password != undefined){
-                this.setState({ password_field_alerts: responseJson.password})
-                this.setState({ password_field_is_bad: true })
-            }
-            else{
-                this.setState({ password_field_alerts: ['']})
-                this.setState({ password_field_is_bad: false })
-            }
-
-            //Sem campo
-            if (responseJson.non_field_errors != undefined){
-                this.setState({ non_field_alert: responseJson.non_field_errors})
-            }
-            else{
-                this.setState({ non_field_alert: ['']})
-            }
-            //Sucesso
-            if (responseJson.token != undefined || responseJson.key != undefined){
-                onSignIn(responseJson.token);
-                this.props.navigation.navigate('MainScreen');
-            }
+        .then (function (response) {
+            self.setState({ showLoading: false });
+            console.log('response.data', response.data);
+            console.log('response.status', response.status);
+            onSignIn(response.data.token);
+            self.props.navigation.navigate('MainScreen');
         })
-        .catch( err => {
-            if (typeof err.text === 'function') {
-                err.text().then(errorMessage => {
-                this.props.dispatch(displayTheError(errorMessage))
-                });
-            } else {
-                Alert.alert("Erro na conexão.");
-                console.log(err)
+        .catch(function (error) {
+            self.setState({ showLoading: false });
+            console.log('error', error);
+            if(!error.response){
+                self.setState({ showLoading: false });
+                Alert.alert("Não foi possível se comunicar com o servidor");
             }
-        });
-        this.setState({ showLoading: false });
-    }
+            else{
+                self.setState({ showLoading: false });
+                console.log('error.response', error.response);
+                console.log('error.status', error.status);
+                //Campo de username
+                if (error.response.data.username != undefined){
+                    self.setState({ username_field_alerts: error.response.data.username})
+                    self.setState({ username_field_is_bad: true })
+                }
+                else{
+                    self.setState({ username_field_alerts: ['']})
+                    self.setState({ username_field_is_bad: false })
+                }
+
+                //Campo de password
+                if (error.response.data.password != undefined){
+                    self.setState({ password_field_alerts: error.response.data.password})
+                    self.setState({ password_field_is_bad: true })
+                }
+                else{
+                    self.setState({ password_field_alerts: ['']})
+                    self.setState({ password_field_is_bad: false })
+                }
+
+                //Sem campo
+                if (error.response.data.non_field_errors != undefined){
+                    self.setState({ non_field_alert: error.response.data.non_field_errors})
+                }
+                else{
+                    self.setState({ non_field_alert: ['']})
+                }
+            }
+		})
+	}
     render() {
         return (
             <View style={styles.container}>
@@ -128,7 +124,7 @@ class Login extends Component {
                     <Button 
                         block  
                         style={styles.button}
-                        onPress={() => this.props.navigation.navigate('SignUpScreen')}
+                        onPress={() => this.props.navigation.navigate('Registration')}
                     >
                         <Text> Registro </Text>
                     </Button>

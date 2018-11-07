@@ -7,6 +7,8 @@ import {
     Alert,
 } from "react-native";
 import { getUserToken, onSignOut } from "../AuthMethods";
+import { YellowBox } from 'react-native'
+YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated'])
 
 class MainScreen extends Component {
     constructor(props) {
@@ -26,7 +28,7 @@ class MainScreen extends Component {
     }
     signOut = async () => {
         onSignOut()
-        this.props.navigation.navigate('LoginScreen')
+        this.props.navigation.navigate('Login')
     }
     render() {
         console.log('token Main screen', this.state.token)

@@ -5,6 +5,9 @@ default:
 run:
 	react-native run-android
 
+console:
+	react-native log-android
+
 rename:
 	rm -rf ios
 	rm -rf android

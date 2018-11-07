@@ -13,6 +13,7 @@ import {
 import Field from '../components/Field';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import { onSignIn } from "../AuthMethods";
+import axios from 'axios';
 
 class Registration extends Component {
     constructor(props) {
@@ -30,100 +31,68 @@ class Registration extends Component {
         const domain = '192.168.1.16:8000';
         var registration_path = `http://${domain}/rest-auth/registration/`;
         
-        fetch(registration_path,{
-          method: 'POST',
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-          'email': this.state.email,
-          'username': this.state.username,
-          'password1': this.state.password1,
-          'password2': this.state.password2,
-  
-        }),
-    })
-    .then((response) => response.json())
-    .then((responseJson) => {
-      console.log(responseJson);
-      //Campo de email
-      if (responseJson.email != undefined){
-        this.setState({ email_field_alerts: responseJson.email})
-        this.setState({ email_field_is_bad: true })
-      }
-      else{
-        this.setState({ email_field_alerts: ['']})
-        this.setState({ email_field_is_bad: false })
-      }
-      //Campo se username
-      if (responseJson.username != undefined){
-        this.setState({ username_field_alerts: responseJson.username})
-        this.setState({ username_field_is_bad: true })
-      }
-      else{
-        this.setState({ email_field_alerts: ['']})
-        this.setState({ email_field_is_bad: false })
-      }
-      //Campo de password
-      if (responseJson.password1 != undefined){
-        this.setState({ password1_field_alerts: responseJson.password1})
-        this.setState({ password1_field_is_bad: true })
-      }
-      else{
-        this.setState({ password_field_alerts: ['']})
-        this.setState({ password_field_is_bad: false })
-      }
-      if (responseJson.password1 != undefined){
-        this.setState({ password2_field_alerts: responseJson.password2})
-        this.setState({ password2_field_is_bad: true })
-      }
-      else{
-        this.setState({ password2_field_alerts: ['']})
-        this.setState({ password2_field_is_bad: false })
-      }
-      //Sem campo
-      if (responseJson.non_field_errors != undefined){
-        this.setState({ non_field_alert: responseJson.non_field_errors})
-      }
-      else{
-        this.setState({ non_field_alert: ['']})
-      }
-      //Sucesso
-     if (responseJson.token != undefined ||
-        responseJson.key != undefined){
-            onSignIn(responseJson.token);
-            this.props.navigation.navigate('MainScreen')
-        }
-     })
-  
-     .catch( err => {
-       if (typeof err.text === 'function') {
-         err.text().then(errorMessage => {
-           this.props.dispatch(displayTheError(errorMessage))
-         });
-       } else {
-         Alert.alert("Erro na conexão.");
-         console.log(err)
-       }
-     });
-     this.setState({ showLoading: false });
+        var self = this;
+        axios.post(registration_path ,{
+            'email': this.state.email,
+            'username': this.state.email,
+            'password1': this.state.password1,
+            'password2': this.state.password1,
+        })
+        .then (function (response) {
+            self.setState({ showLoading: false });
+            console.log('response.data', response.data);
+            console.log('response.status', response.status);
+            onSignIn(response.data.token);
+            self.props.navigation.navigate('MainScreen')
+        })
+        .catch(function (error) {
+            self.setState({ showLoading: false });
+            console.log('error', error);
+            if(!error.response){
+                self.setState({ showLoading: false });
+                Alert.alert("Não foi possível se comunicar com o servidor");
+            }
+            else{
+                self.setState({ showLoading: false });
+                console.log('error.response', error.response);
+                console.log('error.status', error.status);
+                //Campo de email
+                if (error.response.data.email != undefined){
+                    self.setState({ email_field_alerts: error.response.data.email})
+                    self.setState({ email_field_is_bad: true })
+                }
+                else{
+                    self.setState({ email_field_alerts: ['']})
+                    self.setState({ email_field_is_bad: false })
+                }
+                //Campo de password
+                if (error.response.data.password1 != undefined){
+                    self.setState({ password1_field_alerts: error.response.data.password1})
+                    self.setState({ password1_field_is_bad: true })
+                }
+                else{
+                    self.setState({ password_field_alerts: ['']})
+                    self.setState({ password_field_is_bad: false })
+                }
+                //Sem campo
+                if (error.response.data.non_field_errors != undefined){
+                    self.setState({ non_field_alert: error.response.data.non_field_errors})
+                }
+                else{
+                    self.setState({ non_field_alert: ['']})
+                }
+            }
+        
+        })
     }
 
     render() {
         return (
-            <Container style={styles.container}>
+            <View style={styles.container}>
                 <View style={styles.logo}>
                     <Text>Registro</Text>
                 </View>
                 <View style={styles.fields}>
-                    <Field
-                        placeholder={"username"}
-                        badInput={this.state.username_field_is_bad}
-                        fieldAlert={this.state.username_field_alerts}
-                        keyExtractor={'username'}
-                        onChangeText={(username) => this.setState({username})}
-                    /> 
                     <Field
                         placeholder={"email"}
                         badInput={this.state.email_field_is_bad}
@@ -137,15 +106,6 @@ class Registration extends Component {
                         fieldAlert={this.state.password1_field_alerts}
                         keyExtractor={'password1'}
                         onChangeText={(password1) => this.setState({password1})}
-                        secureTextEntry
-                    
-                    />
-                    <Field
-                        placeholder={"repita sua senha"}
-                        badInput={this.state.password2_field_is_bad}
-                        fieldAlert={this.state.password2_field_alerts}
-                        keyExtractor={'password2'}
-                        onChangeText={(password2) => this.setState({password2})}
                         secureTextEntry
                     
                     />
@@ -172,7 +132,7 @@ class Registration extends Component {
                     title={"Loading"}
                     showProgress
                 />
-            </Container>
+            </View>
         );
     }
 }
@@ -183,7 +143,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         flexDirection: 'column',
-        justifyContent: 'space-around',
+        justifyContent: 'space-evenly',
     },
     buttons: {
         flex: 1,
