@@ -44,14 +44,11 @@ class Login extends Component {
             self.props.navigation.navigate('MainScreen');
         })
         .catch(function (error) {
-            self.setState({ showLoading: false });
             console.log('error', error);
             if(!error.response){
-                self.setState({ showLoading: false });
                 Alert.alert("Não foi possível se comunicar com o servidor");
             }
             else{
-                self.setState({ showLoading: false });
                 console.log('error.response', error.response);
                 console.log('error.status', error.status);
                 //Campo de username
@@ -82,6 +79,8 @@ class Login extends Component {
                     self.setState({ non_field_alert: ['']})
                 }
             }
+            self.setState({ showLoading: false });
+            setTimeout(() => {}, 50);
 		})
 	}
     render() {
@@ -140,7 +139,7 @@ class Login extends Component {
                     show={this.state.showLoading}
                     closeOnTouchOutside={false}
                     closeOnHardwareBackPress={false}
-                    title={"Loading"}
+                    title={"Carregando"}
                     showProgress
                 />
             </View>
