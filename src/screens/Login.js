@@ -13,6 +13,7 @@ import Field from '../components/Field';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import { onSignIn } from "../AuthMethods";
 import axios from 'axios';
+import { API_URL } from 'react-native-dotenv'
 
 class Login extends Component {
     constructor(props) {
@@ -27,8 +28,7 @@ class Login extends Component {
     }
     login = async () => {
         this.setState({ showLoading: true });
-        const domain = '192.168.1.16:8000';
-        const login_path = `http://${domain}/rest-auth/token-obtain/`;
+        const login_path = `${API_URL}/rest-auth/token-obtain/`;
         console.log('fetching url:', login_path);
 
         var self = this;

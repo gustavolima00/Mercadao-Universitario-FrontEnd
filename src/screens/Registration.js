@@ -14,6 +14,7 @@ import Field from '../components/Field';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import { onSignIn } from "../AuthMethods";
 import axios from 'axios';
+import { API_URL } from 'react-native-dotenv'
 
 class Registration extends Component {
     constructor(props) {
@@ -28,8 +29,7 @@ class Registration extends Component {
     }
     register = async () => {
         this.setState({ showLoading: true });
-        const domain = '192.168.1.16:8000';
-        var registration_path = `http://${domain}/rest-auth/registration/`;
+        var registration_path = `${API_URL}/rest-auth/registration/`;
         
         var self = this;
         axios.post(registration_path ,{
@@ -78,10 +78,9 @@ class Registration extends Component {
                 else{
                     self.setState({ non_field_alert: ['']})
                 }
-                self.setState({ showLoading: false });
-                setTimeout(() => {}, 50);
             }
-        
+            self.setState({ showLoading: false });
+            setTimeout(() => {}, 50);
         })
     }
 
