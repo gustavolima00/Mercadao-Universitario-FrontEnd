@@ -10,6 +10,8 @@ import {
     Text, 
 } from 'native-base';
 import Field from '../components/Field';
+import LoginButtons from '../components/LoginButtons';
+import LoginFields from '../components/LoginFields';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import { onSignIn } from "../AuthMethods";
 import axios from 'axios';
@@ -40,8 +42,10 @@ class Login extends Component {
             self.setState({ showLoading: false });
             console.log('response.data', response.data);
             console.log('response.status', response.status);
-            onSignIn(response.data.token);
-            self.props.navigation.navigate('MainScreen');
+            if(response.status>= 200 && response.status<300){
+                onSignIn(response.data.token);
+                self.props.navigation.navigate('MainScreen');
+            }
         })
         .catch(function (error) {
             console.log('error', error);
@@ -86,55 +90,19 @@ class Login extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <View style={styles.logo}>
-                    <Text>Login</Text>
-                </View>
-                <View style={styles.fields}> 
-                    <Field
-                        placeholder={"Email/Username"}
-                        badInput={this.state.username_field_is_bad}
-                        fieldAlert={this.state.username_field_alerts}
-                        keyExtractor={'username'}
-                        onChangeText={(username) => this.setState({username})}
-                    />
-                    <Field
-                        placeholder={"Password"}
-                        badInput={this.state.password_field_is_bad}
-                        fieldAlert={this.state.password_field_alerts}
-                        keyExtractor={'password'}
-                        onChangeText={(password) => this.setState({password})}
-                        secureTextEntry
-                    
-                    />
-                    <FlatList
-                      data={this.state.non_field_alert}
-                      renderItem={({item}) => <Text style ={{color: 'red'}}>{item}</Text>}
-                      keyExtractor={item => 'non_field_errors'}
-                    />
-                </View>
-                <View style={styles.buttons}>
-                    <Button 
-                        block 
-                        style={styles.button} 
-                        onPress={this.login}
-                    >
-                        <Text> Entrar </Text>
-                    </Button>
-                    <Button 
-                        block  
-                        style={styles.button}
-                        onPress={() => this.props.navigation.navigate('Registration')}
-                    >
-                        <Text> Registro </Text>
-                    </Button>
-                    <Button 
-                        block info 
-                        style={styles.button}
-                        onPress={() => this.props.navigation.navigate('MainScreen')}
-                    >
-                        <Text> Visitante </Text>
-                    </Button>
-                </View>
+                <LoginFields
+                    emailBadInput = {this.state.username_field_is_bad}
+                    emailAlerts = {this.state.username_field_alerts}
+                    onChangeEmail = {(username) => this.setState({username})}
+                    passwordBadInput = {this.state.password_field_is_bad}
+                    passwordAlerts = {this.state.password_field_alerts}
+                    onChangePassword = {(password) => this.setState({password})}
+                /> 
+                <LoginButtons
+                    onPressLogin={this.login}
+                    onPressRegistration={() => this.props.navigation.navigate('Registration')}
+                    onPressVisitor={() => this.props.navigation.navigate('MainScreen')}
+                />
                 <AwesomeAlert
                     show={this.state.showLoading}
                     closeOnTouchOutside={false}
@@ -151,33 +119,9 @@ export default Login;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
+        //alignItems: 'center',
         flexDirection: 'column',
-        justifyContent: 'space-around',
+        justifyContent: 'center',
+        backgroundColor: 'white',
     },
-    buttons: {
-        flex: 1,
-        alignItems: 'center',
-        flexDirection: 'column',
-        width: 200,
-        justifyContent: 'space-evenly',
-    },
-    button: {
-        marginBottom:5,
-        marginTop:5,
-    },
-    fields: {
-        flex: 1,
-        paddingLeft:20,
-        paddingRight:20,
-        alignItems: 'center',
-        flexDirection: 'column',
-        justifyContent: 'space-evenly',
-    },
-    logo: {
-        flex: 1,
-        alignItems: 'center',
-        flexDirection: 'column',
-        justifyContent: 'space-evenly',
-    }
 });

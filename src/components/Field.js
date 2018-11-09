@@ -38,7 +38,7 @@ export default class Field extends Component{
       }
     }
   return(
-    <View style={this.props.style}>
+    <View style={styles.container}>
         <Item stackedLabel last>
             <Label style={field_style}>{this.props.placeholder}</Label>
             <Input 
@@ -51,9 +51,14 @@ export default class Field extends Component{
             data={this.props.fieldAlert}
             renderItem={({item}) => <Text style ={{color: 'red'}}>{item}</Text>}
             keyExtractor={item => this.props.keyExtractor}
-
         />
      </View>
   )
   }
 }
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    height: 100,
+  },
+})
