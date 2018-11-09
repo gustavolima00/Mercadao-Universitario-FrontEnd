@@ -2,14 +2,7 @@ import React, { Component } from "react";
 import { 
     View, 
     StyleSheet,
-    Alert,
-    FlatList,
 } from "react-native";
-import { 
-    Button, 
-    Text, 
-} from 'native-base';
-import Field from '../components/Field';
 import LoginButtons from '../components/LoginButtons';
 import LoginFields from '../components/LoginFields';
 import AwesomeAlert from 'react-native-awesome-alerts';
@@ -25,13 +18,12 @@ class Login extends Component {
           username_field_is_bad: false, password_field_is_bad: false,
           username_field_alerts: [''], password_field_alerts: [''], 
           non_field_alert: [''],
-          showLoading: false,
+          showLoading: false, showAlert:false,
         };
     }
     login = async () => {
         this.setState({ showLoading: true });
         const login_path = `${API_URL}/rest-auth/token-obtain/`;
-        console.log('fetching url:', login_path);
 
         var self = this;
         axios.post(login_path ,{
@@ -50,7 +42,7 @@ class Login extends Component {
         .catch(function (error) {
             console.log('error', error);
             if(!error.response){
-                Alert.alert("Não foi possível se comunicar com o servidor");
+                self.setState({ showAlert: true });
             }
             else{
                 console.log('error.response', error.response);
@@ -100,8 +92,16 @@ class Login extends Component {
                 /> 
                 <LoginButtons
                     onPressLogin={this.login}
-                    onPressRegistration={() => this.props.navigation.navigate('Registration')}
-                    onPressVisitor={() => this.props.navigation.navigate('MainScreen')}
+                    onPressRegistration={() => {
+                            this.setState({ showAlert: false });
+                            this.props.navigation.navigate('Registration')
+                        }
+                    }
+                    onPressVisitor={() => {
+                            this.setState({ showAlert: false });
+                            this.props.navigation.navigate('MainScreen')
+                        }
+                    }
                 />
                 <AwesomeAlert
                     show={this.state.showLoading}
@@ -109,6 +109,11 @@ class Login extends Component {
                     closeOnHardwareBackPress={false}
                     title={"Carregando"}
                     showProgress
+                />
+                <AwesomeAlert
+                    show={this.state.showAlert}
+                    title="Erro"
+                    message="Não foi possível se comunicar com o servidor"
                 />
             </View>
         );

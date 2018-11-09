@@ -25,7 +25,7 @@ class Registration extends Component {
           username_field_is_bad: false, email_field_is_bad: false, password1_field_is_bad: false, password2_field_is_bad: false,
           username_field_alerts: [''], email_field_alerts: [''], password1_field_alerts: [''], password2_field_alerts: [''], 
           non_field_alert: [''],
-          showLoading: false,
+          showLoading: false, showAlert: false,
         };
     }
     register = async () => {
@@ -49,7 +49,7 @@ class Registration extends Component {
         .catch(function (error) {
             console.log('error', error);
             if(!error.response){
-                Alert.alert("Não foi possível se comunicar com o servidor");
+                self.setState({ showAlert: true });
             }
             else{
                 console.log('error.response', error.response);
@@ -103,11 +103,11 @@ class Registration extends Component {
                     </Text>
                 </View>
                 <View style={styles.buttons}>
-                <TouchableHighlight onPress={this.register} underlayColor="white">
-                    <View style={styles.button}>
-                        <Text style={styles.buttonText}>REGISTRO</Text>
-                    </View>
-                </TouchableHighlight>
+                    <TouchableHighlight onPress={this.register} underlayColor="white">
+                        <View style={styles.button}>
+                            <Text style={styles.buttonText}>REGISTRO</Text>
+                        </View>
+                    </TouchableHighlight>
                 </View>
                 <AwesomeAlert
                     show={this.state.showLoading}
@@ -115,6 +115,11 @@ class Registration extends Component {
                     closeOnHardwareBackPress={false}
                     title={"Carregando"}
                     showProgress
+                />
+                <AwesomeAlert
+                    show={this.state.showAlert}
+                    title="Erro"
+                    message="Não foi possível se comunicar com o servidor"
                 />
             </View>
         );
@@ -125,9 +130,10 @@ export default Registration;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        //backgroundColor: 'powderblue',
         alignItems: 'center',
         flexDirection: 'column',
-        justifyContent: 'space-evenly',
+        justifyContent: 'center',
     },
     buttons: {
         //flex: 1,
@@ -148,7 +154,7 @@ const styles = StyleSheet.create({
         color: '#49515f',
     },
     button: {
-        margin: 2,
+        margin: 10,
         //height: 50,
         width: 100,
         alignItems: 'center',

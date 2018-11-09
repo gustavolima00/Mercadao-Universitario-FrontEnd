@@ -22,6 +22,9 @@ const SignedOutRoutes = createStackNavigator({
 const SignedInRoutes = createStackNavigator({
     MainScreen:{
         screen:MainScreen,
+        navigationOptions: ({ navigation }) => ({
+            header: null,
+        }),
     },
 });
 

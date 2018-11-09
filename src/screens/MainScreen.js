@@ -1,54 +1,138 @@
-import React, { Component } from "react";
-import { 
-    View,
-    Text,
-    StyleSheet,
-    Button,
-    Alert,
-} from "react-native";
-import { getUserToken, onSignOut } from "../AuthMethods";
-import { YellowBox } from 'react-native'
+import React from 'react';
+import { Icon } from 'native-base';
+import { createBottomTabNavigator } from 'react-navigation';
+import Orders from './botton_tabs/Orders';
+import Products from './botton_tabs/Products';
+import Profile from './botton_tabs/Profile';
+import Notifications from './botton_tabs/Notifications';
+import { YellowBox , Image, StyleSheet, View, Text } from 'react-native'
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated'])
 
-class MainScreen extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            token:undefined,
+const MainScreen = createBottomTabNavigator({
+    Products: {
+        screen: Products,
+        navigationOptions: {
+            tabBarLabel: 'Produtos',
+            tabBarIcon: ({ focused }) => (
+                focused ? 
+                <View style={styles.container}>
+                    <Image
+                        source={{uri:'https://i.imgur.com/m2xBrIi.png'}}
+                        style={styles.icon}
+                    />
+                    <Text style={styles.icon_text}> Produtos </Text>
+                </View>
+                  :
+                <View style={styles.container}>
+                    <Image
+                        source={{uri:'https://i.imgur.com/FMHOMka.png'}}
+                        style={styles.icon}
+                    />
+                    <Text style={styles.icon_text}> Produtos </Text>
+                </View>
+            )
+        }
+    },
+    Orders: {
+        screen: Orders,
+        navigationOptions: {
+            tabBarLabel: 'Pedidos',
+            tabBarIcon: ({ focused }) => (
+                focused ? 
+                <View style={styles.container}>
+                    <Image
+                        source={{uri:'https://i.imgur.com/QXcVKIx.png'}}
+                        style={styles.icon}
+                    />
+                    <Text style={styles.icon_text}> Pedidos </Text>
+                </View>
+                  :
+                <View style={styles.container}>
+                    <Image
+                        source={{uri:'https://i.imgur.com/2PEJWWP.png'}}
+                        style={styles.icon}
+                    />
+                    <Text style={styles.icon_text}> Pedidos </Text>
+                </View>
+            )
+        }
+    },
+    Notifications: {
+        screen: Notifications,
+        navigationOptions: {
+            tabBarLabel: 'Notificações',
+            tabBarIcon: ({ focused }) => (
+                focused ? 
+                <View style={styles.container}>
+                    <Image
+                        source={{uri:'https://i.imgur.com/tlZburP.png'}}
+                        style={styles.icon}
+                    />
+                    <Text style={styles.icon_text}> Notificações </Text>
+                </View> 
+                  :
+                <View style={styles.container}>
+                <Image
+                    source={{uri:'https://i.imgur.com/w7u3XBB.png'}}
+                    style={styles.icon}
+                />
+                <Text style={styles.icon_text}> Notificações </Text>
+                </View>
+            )
+        }
+    },
+    Profile: {
+        screen: Profile,
+        navigationOptions: {
+            tabBarLabel: 'Perfil',
+            tabBarIcon: ({ focused }) => (
+                focused ? 
+                <View style={styles.container}>
+                    <Image
+                        source={{uri:'https://i.imgur.com/XAj2YjS.png'}}
+                        style={styles.icon}
+                    />
+                    <Text style={styles.icon_text}> Perfil </Text>
+                </View>
+                  :
+                <View style={styles.container}>
+                <Image
+                    source={{uri:'https://i.imgur.com/o1B0NuR.png'}}
+                    style={styles.icon}
+                />
+                <Text style={styles.icon_text}> Perfil </Text>
+                </View>
+            )
         }
     }
-    
-    static navigationOption = {
-        header: 'none',
-    }
-    componentWillMount(){
-        getUserToken()
-        .then(res => this.setState({ token: res }))
-        .catch(err => alert("Erro"));
-    }
-    signOut = async () => {
-        onSignOut()
-        this.props.navigation.navigate('Login')
-    }
-    render() {
-        console.log('token Main screen', this.state.token)
-        return (
-            <View style={styles.container}>
-                <Text>
-                    Welcome {`token:${this.state.token}`}
-                </Text>
-                <Button title='LogOut' onPress={this.signOut}/>
-            </View>
-        );
-    }
-}
-export default MainScreen;
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        flexDirection: 'column',
-        justifyContent: 'space-evenly',
-    }
+},{
+    tabBarOptions: {
+        showIcon: true,
+        showLabel: false,
+        style: {
+            //backgroundColor: '#49515f',
+        },
+        tabStyle: {
+            height: 50,
+        },
+    },
+    animationEnabled: true,
 });
+
+export default MainScreen;
+const styles = StyleSheet.create({
+    icon: {
+        width: 20, 
+        height: 20,
+        
+    },
+    icon_text: {
+        textAlign: 'center',
+        fontSize: 10,
+    },
+    container:{
+        justifyContent: 'center',
+        alignItems: 'center',
+        //backgroundColor: 'blue'
+    }
+  })
