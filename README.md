@@ -23,14 +23,6 @@ Aplicativo de vendas direcionado para vendas de alimentos em universidades.
     #### Configure o Oracle JDK8 como padrão
         sudo apt install oracle-java8-set-default
 
-
-
-### Java Development Kit
-* [Site Oficial](https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
-    #### openjdk-8-jre
-        sudo npm install -g openjdk-8-jre
-
-
 ### Android Studio
 * [Site Oficial](https://developer.android.com/studio/index.html)
 * Na instalação marque as opçoes
@@ -40,6 +32,13 @@ Aplicativo de vendas direcionado para vendas de alimentos em universidades.
 ### Outros requisitos
 Caso os requisitos acima não tenham funcionado acesse o site oficial do [react-native](https://facebook.github.io/react-native/docs/getting-started) e siga as instrunçoes de instalação da aba 'Building Projects with Native Code'
 ## Como rodar
-* Usando o Makefile
+* Configure variaveis de ambiente
+    #### SKD
+        export ANDROID_HOME=$HOME/Android/Sdk
+        export PATH=$PATH:$ANDROID_HOME/emulator
+        export PATH=$PATH:$ANDROID_HOME/tools
+        export PATH=$PATH:$ANDROID_HOME/tools/bin
+        export PATH=$PATH:$ANDROID_HOME/platform-tools
+* Use o Makefile
     #### Comandos
         make
