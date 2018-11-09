@@ -4,13 +4,14 @@ import {
     StyleSheet,
     FlatList,
     Alert,
+    TouchableHighlight,
 } from "react-native";
 import { 
     Container, 
     Button, 
     Text, 
 } from 'native-base';
-import Field from '../components/Field';
+import LoginFields from '../components/LoginFields';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import { onSignIn } from "../AuthMethods";
 import axios from 'axios';
@@ -87,41 +88,26 @@ class Registration extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <View style={styles.logo}>
-                    <Text>Registro</Text>
-                </View>
-                <View style={styles.fields}>
-                    <Field
-                        placeholder={"email"}
-                        badInput={this.state.email_field_is_bad}
-                        fieldAlert={this.state.email_field_alerts}
-                        keyExtractor={'email'}
-                        onChangeText={(email) => this.setState({email})}
-                    /> 
-                    <Field
-                        placeholder={"senha"}
-                        badInput={this.state.password1_field_is_bad}
-                        fieldAlert={this.state.password1_field_alerts}
-                        keyExtractor={'password1'}
-                        onChangeText={(password1) => this.setState({password1})}
-                        secureTextEntry
-                    
-                    />
-                    <FlatList
-                      data={this.state.non_field_alert}
-                      renderItem={({item}) => <Text style ={{color: 'red'}}>{item}</Text>}
-                      keyExtractor={item => 'non_field_errors'}
-                    />
-                    
+                <LoginFields
+                    emailBadInput = {this.state.email_field_is_bad}
+                    emailAlerts = {this.state.email_field_alerts}
+                    onChangeEmail = {(email) => this.setState({email})}
+                    passwordBadInput = {this.state.password1_field_is_bad}
+                    passwordAlerts = {this.state.password1_field_alerts}
+                    onChangePassword = {(password1) => this.setState({password1})}
+                /> 
+                <View style={styles.text_box}>
+                    <Text style={styles.text}>
+                        Ao clicar em "REGISTRO" você está aceitando 
+                        os termos de uso do aplicativo.
+                    </Text>
                 </View>
                 <View style={styles.buttons}>
-                    <Button 
-                        block  
-                        style={styles.button}
-                        onPress={this.register}
-                    >
-                        <Text> Registro </Text>
-                    </Button>
+                <TouchableHighlight onPress={this.register} underlayColor="white">
+                    <View style={styles.button}>
+                        <Text style={styles.buttonText}>REGISTRO</Text>
+                    </View>
+                </TouchableHighlight>
                 </View>
                 <AwesomeAlert
                     show={this.state.showLoading}
@@ -144,30 +130,38 @@ const styles = StyleSheet.create({
         justifyContent: 'space-evenly',
     },
     buttons: {
-        flex: 1,
+        //flex: 1,
         alignItems: 'center',
-        flexDirection: 'column',
+        flexDirection: 'row',
         width: 200,
-        justifyContent: 'space-evenly',
+        width:'90%',
+        justifyContent: 'flex-end',
+        //backgroundColor: 'powderblue',
+    },
+    text_box: {
+        //flex: 1,
+        //backgroundColor: 'steelblue',
+        width:'80%',
+    },
+    text: {
+        textAlign: 'center',
+        color: '#49515f',
     },
     button: {
-        marginBottom:5,
-        marginTop:5,
-    },
-    fields: {
-        flex: 1,
-        paddingLeft:20,
-        paddingRight:20,
+        margin: 2,
+        //height: 50,
+        width: 100,
         alignItems: 'center',
-        flexDirection: 'column',
-        justifyContent: 'space-evenly',
+        backgroundColor: '#49515f',
+        borderRadius: 2,
+        //borderWidth: 1,
+        //borderColor: 'black'
     },
-    field: {
-        paddingBottom:20,
-        paddingTop:20,
+    buttonText: {
+        fontSize: 14,
+        paddingTop: 12,
+        paddingBottom: 12,
+        color: 'white',
+        //fontWeight: 'bold',
     },
-    logo: {
-        flex: 1,
-        alignItems: 'center',
-    }
 });

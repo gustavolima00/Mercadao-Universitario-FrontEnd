@@ -28,7 +28,7 @@ export default class LoginFields extends Component{
     }
     else{ // default button style
       email_style = {
-        color: '#191d1e',
+        color: '#49515f',
         //borderWidth: 2,
       }
     }
@@ -40,14 +40,14 @@ export default class LoginFields extends Component{
       }
       else{ // default button style
         password_style = {
-          color: '#191d1e',
+          color: '#49515f',
           //borderWidth: 2,
         }
       }
   return(
     <View style={styles.container}>
         <Form>
-            <Item stackedLabel>
+            <Item floatingLabel>
                 <Label style={email_style}>Email</Label>
                 <Input 
                     style={{color: 'black'}}
@@ -61,8 +61,8 @@ export default class LoginFields extends Component{
             keyExtractor={item => 'username'}
         />
         <Form>
-            <Item stackedLabel>
-                <Label style={password_style}>Password</Label>
+            <Item floatingLabel>
+                <Label style={password_style}>Senha</Label>
                 <Input 
                     style={{color: 'black'}}
                     onChangeText={this.props.onChangePassword}
@@ -87,8 +87,9 @@ const styles = StyleSheet.create({
     // justifyContent: 'center',
     //backgroundColor: 'skyblue',
     height:200,
+    width: '90%',
     //margin:20,
-    marginLeft:20,
-    marginRight:20,
+    //marginLeft:20,
+    //marginRight:20,
   },
 })

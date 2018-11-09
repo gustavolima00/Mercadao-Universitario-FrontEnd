@@ -122,6 +122,6 @@ const styles = StyleSheet.create({
         //alignItems: 'center',
         flexDirection: 'column',
         justifyContent: 'center',
-        backgroundColor: 'white',
+        //backgroundColor: 'white',
     },
 });

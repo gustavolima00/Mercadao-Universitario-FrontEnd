@@ -55,10 +55,10 @@ const styles = StyleSheet.create({
         //borderColor: 'black'
     },
     buttonText: {
-        fontSize: 13,
+        fontSize: 14,
         paddingTop: 12,
         paddingBottom: 12,
         color: 'white',
-        fontWeight: 'bold',
+        //fontWeight: 'bold',
     },
 })
