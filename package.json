@@ -16,6 +16,7 @@
     "react-dom": "^16.6.1",
     "react-native": "0.55.4",
     "react-native-awesome-alerts": "^1.1.1",
+    "react-native-image-picker": "^0.27.1",
     "react-navigation": "^2.18.2"
   },
   "devDependencies": {
