@@ -9,6 +9,7 @@ import AwesomeAlert from 'react-native-awesome-alerts';
 import { onSignIn } from "../AuthMethods";
 import axios from 'axios';
 import { API_URL } from 'react-native-dotenv'
+import { BackHandler } from 'react-native';
 
 class Login extends Component {
     constructor(props) {
@@ -35,7 +36,7 @@ class Login extends Component {
         BackHandler.exitApp();
         return true;
     }
-    
+
     login = async () => {
         this.setState({ showLoading: true });
         const login_path = `${API_URL}/rest-auth/token-obtain/`;

@@ -7,14 +7,13 @@ const SignedOutRoutes = createStackNavigator({
     Login:{
         screen:Login,
         navigationOptions: ({ navigation }) => ({
-        header: null,
-
+            header: null,
         }),
     },
     Registration:{
         screen:Registration,
         navigationOptions: ({ navigation }) => ({
-        header: null,
+            header: null,        
         }),
     },
 });
