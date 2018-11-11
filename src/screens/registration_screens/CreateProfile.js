@@ -9,15 +9,16 @@ import {
 import { 
     Text, 
 } from 'native-base';
-import LoginFields from '../../components/LoginFields';
+import Field from '../../components/Field';
 import AwesomeAlert from 'react-native-awesome-alerts';
-import { onSignIn } from "../../AuthMethods";
+import { getUserToken } from "../../AuthMethods";
 import axios from 'axios';
 import { API_URL } from 'react-native-dotenv'
 import { BackHandler } from 'react-native';
 import { Item, Input, Label, Form } from 'native-base';
 import ImagePicker from 'react-native-image-picker';
 
+DEFAULT_PHOTO='https://i.imgur.com/UWQ0GOq.png'
 
 class CreateProfile extends Component {
     constructor(props) {
@@ -25,11 +26,17 @@ class CreateProfile extends Component {
         this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
         this.state = {
           name: '', showAlert:false, showLoading:false,
-          photo: 'https://i.imgur.com/UWQ0GOq.png',
+          photo: DEFAULT_PHOTO,
+          token: undefined,
+          name_field_alerts:[''],
+          name_field_is_bad:false,
         };
     }
     componentWillMount() {
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+        getUserToken()
+        .then(res => this.setState({ token: res }))
+        .catch(err => alert("Erro"));
     }
 
     componentWillUnmount() {
@@ -40,6 +47,7 @@ class CreateProfile extends Component {
         BackHandler.exitApp();
         return true;
     }
+
     update_photo = () => {
         //Alert.alert('Você apertou a imagem')
         const options = {
@@ -67,7 +75,55 @@ class CreateProfile extends Component {
           });
     }
     create_profile = () => {
-        Alert.alert('Você apertou o botão')
+        //Alert.alert('Você apertou o botão')
+        this.setState({ showLoading: true });
+        var creation_profile_path = `${API_URL}/profiles/create_profile/`;
+
+        var self = this;
+        if(this.state.photo==DEFAULT_PHOTO){
+            var data = {
+                'name': this.state.name,
+                'token': this.state.token, 
+            }
+        }
+        else{
+            var data = {
+                'name': this.state.name,
+                'photo': this.state.photo,
+                'token': this.state.token, 
+            }
+        }
+        axios.post(creation_profile_path , data)
+        .then (function (response) {
+            self.setState({ showLoading: false });
+            console.log('response.data', response.data);
+            console.log('response.status', response.status);
+            if(response.status>= 200 && response.status<300){
+                self.props.navigation.navigate('MainScreen');
+            }
+        })
+        .catch(function (error) {
+            console.log('error', error);
+            if(!error.response){
+                self.setState({ showAlert: true });
+            }
+            else{
+                console.log('error.response', error.response);
+                console.log('error.status', error.status);
+                //Campo de nome
+                if (error.response.data.name != undefined){
+                    self.setState({ name_field_alerts: error.response.data.name})
+                    self.setState({ name_field_is_bad: true })
+                }
+                else{
+                    self.setState({ name_field_alerts: ['']})
+                    self.setState({ name_field_is_bad: false })
+                }
+            }
+            self.setState({ showLoading: false });
+            setTimeout(() => {}, 50);
+        })
+
     }
 
     render() {
@@ -81,17 +137,16 @@ class CreateProfile extends Component {
                       />
                     </View>
                 </TouchableHighlight>
-                <View style={styles.fieldView}>
-                    <Form>
-                        <Item floatingLabel>
-                            <Label style={styles.field}>Nome</Label>
-                            <Input 
-                                style={{color: 'black'}}
-                                onChangeText={(name) => this.setState({name})}
-                            />
-                        </Item>
-                    </Form>
-                </View>
+                <Field
+                    placeholder="Nome"
+                    onChangeText={(name) => {
+                        this.setState({ showLoading: false });
+                        this.setState({name})
+                    }}
+                    fieldAlert={this.state.name_field_alerts}
+                    badInput={this.state.name_field_is_bad}
+                    keyExtractor='name'
+                />
                 <View style={styles.buttons}>
                     <TouchableHighlight onPress={this.create_profile} underlayColor="white">
                         <View style={styles.button}>
@@ -103,7 +158,7 @@ class CreateProfile extends Component {
                     show={this.state.showLoading}
                     closeOnTouchOutside={false}
                     closeOnHardwareBackPress={false}
-                    title={"Carregando"}
+                    title={"Criando Perfil"}
                     showProgress
                 />
                 <AwesomeAlert

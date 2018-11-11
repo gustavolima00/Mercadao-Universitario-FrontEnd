@@ -38,6 +38,7 @@ class Login extends Component {
     }
 
     login = async () => {
+        //this.setState({ showAlert: false });
         this.setState({ showLoading: true });
         const login_path = `${API_URL}/rest-auth/token-obtain/`;
 
@@ -101,10 +102,17 @@ class Login extends Component {
                 <LoginFields
                     emailBadInput = {this.state.username_field_is_bad}
                     emailAlerts = {this.state.username_field_alerts}
-                    onChangeEmail = {(username) => this.setState({username})}
+                    onChangeEmail = {(username) => {
+                        this.setState({username})
+                        this.setState({ showAlert: false });
+                        }
+                    }
                     passwordBadInput = {this.state.password_field_is_bad}
                     passwordAlerts = {this.state.password_field_alerts}
-                    onChangePassword = {(password) => this.setState({password})}
+                    onChangePassword = {(password) => {
+                        this.setState({password})
+                        this.setState({ showAlert: false });
+                    }}
                 /> 
                 <LoginButtons
                     onPressLogin={this.login}

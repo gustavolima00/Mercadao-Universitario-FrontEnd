@@ -3,14 +3,14 @@ import CreateAccount from './registration_screens/CreateAccount';
 import CreateProfile from './registration_screens/CreateProfile';
 
 const Registration = createStackNavigator({
-    CreateProfile:{
-        screen:CreateProfile,
+    CreateAccount:{
+        screen:CreateAccount,
         navigationOptions: ({ navigation }) => ({
             header: null,
         }),
     },
-    CreateAccount:{
-        screen:CreateAccount,
+    CreateProfile:{
+        screen:CreateProfile,
         navigationOptions: ({ navigation }) => ({
             header: null,
         }),

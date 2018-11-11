@@ -40,7 +40,7 @@ class CreateAccount extends Component {
     }
 
     register = async () => {
-
+        //this.setState({ showAlert: false });
         this.setState({ showLoading: true });
         var registration_path = `${API_URL}/rest-auth/registration/`;
         
@@ -55,8 +55,10 @@ class CreateAccount extends Component {
             self.setState({ showLoading: false });
             console.log('response.data', response.data);
             console.log('response.status', response.status);
-            onSignIn(response.data.token);
-            self.props.navigation.navigate('CreateProfile');
+            if(response.status>= 200 && response.status<300){
+                onSignIn(response.data.token);
+                self.props.navigation.navigate('CreateProfile');
+            }
         })
         .catch(function (error) {
             console.log('error', error);
@@ -103,10 +105,18 @@ class CreateAccount extends Component {
                 <LoginFields
                     emailBadInput = {this.state.email_field_is_bad}
                     emailAlerts = {this.state.email_field_alerts}
-                    onChangeEmail = {(email) => this.setState({email})}
+                    onChangeEmail = {(email) => {
+                            this.setState({email})
+                            this.setState({ showAlert: false });
+                        }
+                    }
                     passwordBadInput = {this.state.password1_field_is_bad}
                     passwordAlerts = {this.state.password1_field_alerts}
-                    onChangePassword = {(password1) => this.setState({password1})}
+                    onChangePassword = {(password1) => {
+                            this.setState({password1})
+                            this.setState({ showAlert: false });
+                        }
+                    }
                 /> 
                 <View style={styles.text_box}>
                     <Text style={styles.text}>
