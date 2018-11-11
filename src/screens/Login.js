@@ -13,6 +13,7 @@ import { API_URL } from 'react-native-dotenv'
 class Login extends Component {
     constructor(props) {
         super(props);
+        this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
         this.state = {
           username: '', password: '',
           username_field_is_bad: false, password_field_is_bad: false,
@@ -21,6 +22,20 @@ class Login extends Component {
           showLoading: false, showAlert:false,
         };
     }
+
+    componentWillMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+
+    handleBackButtonClick() {
+        BackHandler.exitApp();
+        return true;
+    }
+    
     login = async () => {
         this.setState({ showLoading: true });
         const login_path = `${API_URL}/rest-auth/token-obtain/`;
@@ -95,11 +110,6 @@ class Login extends Component {
                     onPressRegistration={() => {
                             this.setState({ showAlert: false });
                             this.props.navigation.navigate('Registration')
-                        }
-                    }
-                    onPressVisitor={() => {
-                            this.setState({ showAlert: false });
-                            this.props.navigation.navigate('MainScreen')
                         }
                     }
                 />

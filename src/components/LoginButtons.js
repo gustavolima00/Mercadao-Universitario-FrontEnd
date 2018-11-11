@@ -26,11 +26,6 @@ export default class LoginButtons extends Component{
                     <Text style={styles.buttonText} >REGISTRO</Text>
                 </View>
             </TouchableHighlight>
-            <TouchableHighlight onPress={this.props.onPressVisitor} underlayColor="white">
-                <View style={styles.button}>
-                    <Text style={styles.buttonText} >VISITANTE</Text>
-                </View>
-            </TouchableHighlight>
         </View>
     )
   }
