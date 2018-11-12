@@ -9,9 +9,9 @@ import {
 import { 
     Text, 
 } from 'native-base';
-import Field from '../../components/Field';
+import Field from '../components/Field';
 import AwesomeAlert from 'react-native-awesome-alerts';
-import { getUserToken } from "../../AuthMethods";
+import { getUserToken } from "../AuthMethods";
 import axios from 'axios';
 import { API_URL } from 'react-native-dotenv'
 import { BackHandler } from 'react-native';
@@ -93,7 +93,7 @@ class CreateProfile extends Component {
                 'token': this.state.token, 
             }
         }
-        axios.post(creation_profile_path , data)
+        axios.post(creation_profile_path , data                                                                                                 )
         .then (function (response) {
             self.setState({ showLoading: false });
             console.log('response.data', response.data);
