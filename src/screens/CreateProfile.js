@@ -4,7 +4,6 @@ import {
     StyleSheet,
     TouchableHighlight,
     Image,
-    Alert
 } from "react-native";
 import { 
     Text, 
@@ -15,7 +14,6 @@ import { getUserToken } from "../AuthMethods";
 import axios from 'axios';
 import { API_URL } from 'react-native-dotenv'
 import { BackHandler } from 'react-native';
-import { Item, Input, Label, Form } from 'native-base';
 import ImagePicker from 'react-native-image-picker';
 
 DEFAULT_PHOTO='https://i.imgur.com/UWQ0GOq.png'
