@@ -105,17 +105,11 @@ class CreateAccount extends Component {
                 <LoginFields
                     emailBadInput = {this.state.email_field_is_bad}
                     emailAlerts = {this.state.email_field_alerts}
-                    onChangeEmail = {(email) => {
-                            this.setState({email})
-                            this.setState({ showAlert: false });
-                        }
+                    onChangeEmail = {(email) => this.setState({email, showAlert: false })
                     }
                     passwordBadInput = {this.state.password1_field_is_bad}
                     passwordAlerts = {this.state.password1_field_alerts}
-                    onChangePassword = {(password1) => {
-                            this.setState({password1})
-                            this.setState({ showAlert: false });
-                        }
+                    onChangePassword = {(password1) => this.setState({password1, showAlert: false})
                     }
                 /> 
                 <View style={styles.text_box}>
