@@ -7,6 +7,10 @@ import {
 } from "react-native";
 import { getUserToken, onSignOut } from "../../AuthMethods";
 import axios from 'axios';
+import Error from './components/Error'
+import HasProfile from './components/HasProfile'
+import Loading from './components/Loading'
+import NotProfile from './components/NotProfile'
 import { API_URL } from 'react-native-dotenv'
 
 class Profile extends Component {
@@ -42,7 +46,6 @@ class Profile extends Component {
             .catch(function (error) {
                 console.log('error', error);
                 if(!error.response){
-                    console.log('Passou no erro ')
                     self.setState({ has_conection: false,  loaded: true});
                 }
                 else{
@@ -67,46 +70,21 @@ class Profile extends Component {
         this.props.navigation.navigate('Login')
     }
     render() {
-        const { has_profile, loaded, profile, has_conection} = this.state;
         if (!this.state.loaded) {
-            return (
-                <View style={styles.container}>
-                    <Text>
-                        Carregando
-                    </Text>
-                </View>
-            );
+            return <Loading/>
         }
         else{
             if(!this.state.has_conection){
-                return(
-                    <View style={styles.container}>
-                        <Text>
-                            Sem conexão
-                        </Text>
-                    </View>
-                );      
+                return <Error
+                            error = 'Sem Conexão'
+                        />     
             }
             else{
                 if(this.state.has_profile){
-                    return (
-                        <View style={styles.container}>
-                            <Text>
-                                Tem perfil
-                            </Text>
-                            <Button title='LogOut' onPress={this.signOut}/>
-                        </View>
-                    );
+                    return <HasProfile/>
                 }
                 else{
-                    return(
-                        <View style={styles.container}>
-                            <Text>
-                                Sem perfil
-                            </Text>
-                            <Button title='LogOut' onPress={this.signOut}/>
-                        </View>
-                    );
+                    return <NotProfile/>
                 }
             }
         }
