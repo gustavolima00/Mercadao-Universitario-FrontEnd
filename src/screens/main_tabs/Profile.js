@@ -21,7 +21,8 @@ class Profile extends Component {
             has_profile: false,
             loaded: false,
             profile: undefined,
-            has_conection:true,
+            has_error:false,
+            error: 'Sem conexão',
         }
     }
     
@@ -46,7 +47,7 @@ class Profile extends Component {
             .catch(function (error) {
                 console.log('error', error);
                 if(!error.response){
-                    self.setState({ has_conection: false,  loaded: true});
+                    self.setState({ has_error: true,  loaded: true});
                 }
                 else{
                     console.log('error.response', error.response);
@@ -56,7 +57,7 @@ class Profile extends Component {
                         self.setState({ loaded: true, has_profile: false,})
                     }
                     else{
-                        //self.setState({ loaded: true})
+                        self.setState({ loaded: true, error:error.response.data.error,  has_error: true})
                     }
                 }
             })
@@ -74,9 +75,9 @@ class Profile extends Component {
             return <Loading/>
         }
         else{
-            if(!this.state.has_conection){
+            if(this.state.has_error){
                 return <Error
-                            error = 'Sem Conexão'
+                            error = {this.state.error}
                         />     
             }
             else{
