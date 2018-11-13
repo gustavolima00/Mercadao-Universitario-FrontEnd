@@ -33,12 +33,12 @@ export default class Field extends Component{
     }
     else{ // default button style
       field_style = {
-        color: 'black',
+        color: '#49515f',
         //borderWidth: 2,
       }
     }
   return(
-    <View>
+    <View style={styles.container}>
         <Item floatingLabel last>
             <Label style={field_style}>{this.props.placeholder}</Label>
             <Input 
@@ -58,8 +58,8 @@ export default class Field extends Component{
 }
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    height: 100,
-    //width: '100%',
+    height: 150,
+    width: '90%',
+    justifyContent: 'center',
   },
 })

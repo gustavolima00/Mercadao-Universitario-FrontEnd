@@ -2,13 +2,9 @@ import React, { Component } from "react";
 import { 
     View, 
     StyleSheet,
-    FlatList,
-    Alert,
     TouchableHighlight,
 } from "react-native";
 import { 
-    Container, 
-    Button, 
     Text, 
 } from 'native-base';
 import LoginFields from '../components/LoginFields';
@@ -16,10 +12,12 @@ import AwesomeAlert from 'react-native-awesome-alerts';
 import { onSignIn } from "../AuthMethods";
 import axios from 'axios';
 import { API_URL } from 'react-native-dotenv'
+import { BackHandler } from 'react-native';
 
-class Registration extends Component {
+class CreateAccount extends Component {
     constructor(props) {
         super(props);
+        this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
         this.state = {
           username: '', email: '', password1: '', password2: '',
           username_field_is_bad: false, email_field_is_bad: false, password1_field_is_bad: false, password2_field_is_bad: false,
@@ -28,7 +26,21 @@ class Registration extends Component {
           showLoading: false, showAlert: false,
         };
     }
+    componentWillMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+
+    handleBackButtonClick() {
+        this.props.navigation.goBack(null);
+        return true;
+    }
+
     register = async () => {
+        //this.setState({ showAlert: false });
         this.setState({ showLoading: true });
         var registration_path = `${API_URL}/rest-auth/registration/`;
         
@@ -43,8 +55,10 @@ class Registration extends Component {
             self.setState({ showLoading: false });
             console.log('response.data', response.data);
             console.log('response.status', response.status);
-            onSignIn(response.data.token);
-            self.props.navigation.navigate('MainScreen')
+            if(response.status>= 200 && response.status<300){
+                onSignIn(response.data.token);
+                self.props.navigation.navigate('CreateProfile');
+            }
         })
         .catch(function (error) {
             console.log('error', error);
@@ -91,10 +105,12 @@ class Registration extends Component {
                 <LoginFields
                     emailBadInput = {this.state.email_field_is_bad}
                     emailAlerts = {this.state.email_field_alerts}
-                    onChangeEmail = {(email) => this.setState({email})}
+                    onChangeEmail = {(email) => this.setState({email, showAlert: false })
+                    }
                     passwordBadInput = {this.state.password1_field_is_bad}
                     passwordAlerts = {this.state.password1_field_alerts}
-                    onChangePassword = {(password1) => this.setState({password1})}
+                    onChangePassword = {(password1) => this.setState({password1, showAlert: false})
+                    }
                 /> 
                 <View style={styles.text_box}>
                     <Text style={styles.text}>
@@ -125,7 +141,7 @@ class Registration extends Component {
         );
     }
 }
-export default Registration;
+export default CreateAccount;
 
 const styles = StyleSheet.create({
     container: {

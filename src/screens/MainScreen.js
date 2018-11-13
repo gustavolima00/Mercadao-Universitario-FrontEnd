@@ -1,10 +1,10 @@
 import React from 'react';
 import { Icon } from 'native-base';
 import { createBottomTabNavigator } from 'react-navigation';
-import Orders from './botton_tabs/Orders';
-import Products from './botton_tabs/Products';
-import Profile from './botton_tabs/Profile';
-import Notifications from './botton_tabs/Notifications';
+import Orders from './main_tabs/Orders';
+import Products from './main_tabs/Products';
+import Profile from './main_tabs/Profile';
+import Notifications from './main_tabs/Notifications';
 import { YellowBox , Image, StyleSheet, View, Text } from 'react-native'
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated'])
 
