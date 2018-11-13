@@ -1,10 +1,8 @@
 import React, { Component } from "react";
 import { 
-    View,
-    Text,
     StyleSheet,
-    Button,
 } from "react-native";
+import {NavigationActions} from 'react-navigation'
 import { getUserToken, onSignOut } from "../../AuthMethods";
 import axios from 'axios';
 import Error from './components/Error'
@@ -78,14 +76,13 @@ class Profile extends Component {
     }
     signOut = async () => {
         onSignOut()
+        this.props.navigation.reset([NavigationActions.navigate({ routeName: 'MainScreen' })], 0)
         this.props.navigation.navigate('Login')
     }
-    handleOnNavigate = () => {
-        this.setState({
-          loading:false
-        })
+    createProfile = async () =>{
+        this.props.navigation.reset([NavigationActions.navigate({ routeName: 'MainScreen' })], 0)
+        this.props.navigation.navigate('CreateProfile')
     }
-
     render() {
         if (!this.state.loaded) {
             return <Loading/>
@@ -107,7 +104,7 @@ class Profile extends Component {
                 }
                 else{
                     return <NotProfile
-                                onPressCreate={()=> this.props.navigation.navigate('CreateProfile')}
+                                onPressCreate={this.createProfile}
                                 onPressSignOut={this.signOut}
                             />
                 }
