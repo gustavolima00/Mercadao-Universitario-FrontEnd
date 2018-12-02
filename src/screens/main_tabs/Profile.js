@@ -5,15 +5,17 @@ import {
 import {NavigationActions} from 'react-navigation'
 import { getUserToken, onSignOut } from "../../AuthMethods";
 import axios from 'axios';
-import Error from './components/Error'
-import HasProfile from './components/HasProfile'
-import Loading from './components/Loading'
-import NotProfile from './components/NotProfile'
+import Error from './screens/Error'
+import HasProfile from './screens/profile/HasProfile'
+import Loading from './screens/Loading'
+import NotProfile from './screens/profile/NotProfile'
 import { API_URL } from 'react-native-dotenv'
+import { BackHandler } from 'react-native';
 
 class Profile extends Component {
     constructor(props) {
         super(props);
+        this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
         this.state = {
             token:undefined,
             has_profile: false,
@@ -33,13 +35,20 @@ class Profile extends Component {
         getUserToken()
         .then(res => {
             this.setState({ token: res });
-            this.loadScreen()
-            
+            BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+            this.loadScreen();
         })
-        .catch(err => alert("Erro"));   
+        .catch(err => alert(err));   
+    }
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+    handleBackButtonClick() {
+        BackHandler.exitApp();
+        return true;
     }
     loadScreen = async () => {
-        var get_profile_path = `${API_URL}/profiles/get_profile/`;
+        var get_profile_path = `${API_URL}/profiles/update_profile/`;
         var self = this;
         axios.post(get_profile_path , {'token':this.state.token})
         .then (function (response) {
@@ -91,6 +100,7 @@ class Profile extends Component {
             if(this.state.has_error){
                 return <Error
                             error = {this.state.error}
+                            onPressSignOut={this.signOut}
                         />     
             }
             else{
