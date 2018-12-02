@@ -3,9 +3,12 @@ import {
 	View,
 	StyleSheet,
 	ScrollView,
-	RefreshControl
+    RefreshControl,
+    Text
 } from 'react-native';
 import axios from 'axios';
+import { API_URL } from 'react-native-dotenv'
+import ProductCard from '../../components/ProductCard'
 
 class AllProducts extends Component {
     constructor(props) {
@@ -21,7 +24,7 @@ class AllProducts extends Component {
     loadProducts = async () => {
         var all_products_path = `${API_URL}/products/all_products/`;
         var self = this;
-        axios.post(all_products_path)
+        axios.get(all_products_path)
         .then (function (response) {
             self.setState({ refreshing: false });
             console.log('response.data', response.data);
@@ -38,31 +41,36 @@ class AllProducts extends Component {
     }
     refreshProducts = async () => {
 		this.setState({ refreshing: true });
-		this.loadOffers();
+		this.loadProducts();
 	}
     render() {
-		return (
-			<View style={styles.container}>
-				<ScrollView
-					refreshControl={
-						<RefreshControl
-							refreshing={this.state.refreshing}
-							onRefresh={this.refreshProducts}
-						/>
-					}
-				>
-					{this.state.products.map((product, index) => {
-						return (
-							<Text>
-                                {product.photo}
-								{product.name}
-								{parseFloat(product.price).toFixed(2)}
-                            </Text>
-						);
-					})}
-				</ScrollView>
-			</View>
-		);
+        return (
+            <View style={styles.container}>
+                <ScrollView
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={this.state.refreshing}
+                            onRefresh={this.refreshProducts}
+                        />
+                    }
+                >
+                    {this.state.products.map((product, index) => {
+                        vendor_name = product.vendor ? product.vendor.name:undefined;
+                        vendor_photo = product.vendor ? product.vendor.photo:undefined;
+                        return (
+                            <ProductCard
+                                key={index}
+                                productName={product.name}
+                                vendorName={vendor_name}
+                                vendorPhoto={vendor_photo}
+                                productPhoto={product.photo}
+                                productPrice={product.price}
+                            />
+                        );
+                    })}
+                </ScrollView>
+            </View>
+        );
 	}
 
 }
