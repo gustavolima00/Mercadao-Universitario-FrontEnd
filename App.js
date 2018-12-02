@@ -1,50 +1,29 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
+import React from 'react';
+import { RootNavigator } from './src/Routes';
+import { isSignedIn } from "./src/AuthMethods";
 
-import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
-import { API_URL } from 'react-native-dotenv'
+class App extends React.Component {
+  state = {
+    signed: false,
+    signLoaded: false,
+  }
 
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-  android:
-    'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
+  componentWillMount(){
+    isSignedIn()
+    .then(res => this.setState({ signed: res, signLoaded: true }))
+    .catch(err => alert("Erro"));
+  }
 
-type Props = {};
-export default class App extends Component<Props> {
   render() {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to React Native!</Text>
-        <Text style={styles.instructions}>{API_URL}</Text>
-        <Text style={styles.instructions}>{instructions}</Text>
-      </View>
-    );
+    const { signLoaded, signed } = this.state;
+
+    if (!signLoaded) {
+      return null;
+    }
+
+    const Layout = RootNavigator(signed);
+    return <Layout />;
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});
+export default App;
