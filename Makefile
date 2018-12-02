@@ -10,8 +10,6 @@ console:
 
 set-icon:
 	
-	cp icon_backup/AndroidManifest.xml android/app/src/main
-
 	cp icon_backup/res/mipmap-mdpi/ic_launcher.png android/app/src/main/res/mipmap-mdpi
 	cp icon_backup/res/mipmap-mdpi/ic_launcher_round.png android/app/src/main/res/mipmap-mdpi
 
