@@ -33,14 +33,11 @@ class Profile extends Component {
     static navigationOption = {
         header: 'none',
     }
+    componentDidMount(){
+        this.loadScreen()
+    }
     componentWillMount(){
-        getUserToken()
-        .then(res => {
-            this.setState({ token: res });
-            BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
-            this.loadScreen();
-        })
-        .catch(err => alert(err));   
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);  
     }
     componentWillUnmount() {
         BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
@@ -50,6 +47,11 @@ class Profile extends Component {
         return true;
     }
     loadScreen = async () => {
+        await getUserToken()
+        .then(res => {
+            this.setState({ token: res });
+        })
+        .catch(err => alert(err)); 
         var get_profile_path = `${API_URL}/profiles/update_profile/`;
         var self = this;
         axios.post(get_profile_path , {'token':this.state.token})
@@ -108,6 +110,10 @@ class Profile extends Component {
                 return <Error
                             error = {this.state.error}
                             onPressSignOut={this.signOut}
+                            onPressScreen={() => {
+                                this.setState({ loaded:false, has_error:false }) 
+                                this.loadScreen()
+                            }}
                         />     
             }
             else{

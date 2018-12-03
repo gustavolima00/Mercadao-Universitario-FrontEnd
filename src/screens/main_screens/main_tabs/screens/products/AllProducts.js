@@ -44,35 +44,52 @@ class AllProducts extends Component {
 		this.loadProducts();
 	}
     render() {
-        return (
-            <View style={styles.container}>
-                <ScrollView
-                    refreshControl={
-                        <RefreshControl
-                            refreshing={this.state.refreshing}
-                            onRefresh={this.refreshProducts}
-                        />
-                    }
-                >
-                    {this.state.products.map((product, index) => {
-                        vendor_name = product.vendor ? product.vendor.name:undefined;
-                        vendor_photo = product.vendor ? product.vendor.photo:undefined;
-                        return (
-                            <ProductCard
-                                key={index}
-                                onPressVendorPhoto={() => {this.props.navigation.navigate('ProfileDetails', {user:product.vendor, title: vendor_name})}}
-                                onPressCard={() => {this.props.navigation.navigate('ProductDetails', {product:product, title: product.name})}}
-                                productName={product.name}
-                                vendorName={vendor_name}
-                                vendorPhoto={vendor_photo}
-                                productPhoto={product.photo}
-                                productPrice={product.price}
+        if(this.state.products.length>0)
+            return (
+                <View style={styles.container}>
+                    <ScrollView
+                        refreshControl={
+                            <RefreshControl
+                                refreshing={this.state.refreshing}
+                                onRefresh={this.refreshProducts}
                             />
-                        );
-                    })}
-                </ScrollView>
-            </View>
-        );
+                        }
+                    >
+                        {this.state.products.map((product, index) => {
+                            vendor_name = product.vendor ? product.vendor.name:undefined;
+                            vendor_photo = product.vendor ? product.vendor.photo:undefined;
+                            return (
+                                <ProductCard
+                                    key={index}
+                                    onPressVendorPhoto={() => {this.props.navigation.navigate('ProfileDetails', {user:product.vendor, title: vendor_name})}}
+                                    onPressCard={() => {this.props.navigation.navigate('ProductDetails', {product:product, title: product.name})}}
+                                    productName={product.name}
+                                    vendorName={vendor_name}
+                                    vendorPhoto={vendor_photo}
+                                    productPhoto={product.photo}
+                                    productPrice={product.price}
+                                />
+                            );
+                        })}
+                    </ScrollView>
+                </View>
+            );
+        else 
+            return (
+                <View style={styles.container}>
+                    <ScrollView
+                        refreshControl={
+                            <RefreshControl
+                                refreshing={this.state.refreshing}
+                                onRefresh={this.refreshProducts}
+                            />
+                        }
+                    >
+                    <Text style={styles.text}> Não foram encontrados produtos proximos a você :( </Text>
+                    <Text style={styles.text}> Deslise para baixo para atualizar </Text>
+                    </ScrollView>
+                </View>
+            );
 	}
 
 }
@@ -81,5 +98,9 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         width: '100%',
+    },
+    text:{
+        textAlign: 'center',
+        fontSize: 20,
     }
 });

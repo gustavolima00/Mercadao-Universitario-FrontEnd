@@ -4,6 +4,7 @@ import {
     Text,
     StyleSheet,
     TouchableHighlight,
+    TouchableOpacity,
 } from "react-native";
 
 export default class Error extends Component {
@@ -15,15 +16,12 @@ export default class Error extends Component {
     }
     render(){
         return(
-            <View style = {styles.container}>
-                <Text> {this.props.error} </Text>
-                <TouchableHighlight onPress={this.props.onPressSignOut} underlayColor="white">
-                    <View style={styles.button}>
-                        <Text style={styles.buttonText}>SAIR</Text>
-                    </View>
-                </TouchableHighlight>
-            </View>
-
+            <TouchableOpacity style = {{flex:1}} onPress={this.props.onPressScreen}>
+                <View style = {styles.container}>
+                    <Text style = {styles.text}> {this.props.error} </Text>
+                    <Text style = {styles.text}> Aperte na tela para atualizar </Text>
+                </View>
+            </TouchableOpacity>
         );
     }
 
@@ -33,11 +31,12 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         flexDirection: 'column',
-        justifyContent: 'space-evenly',
+        justifyContent: 'center',
     },
     text: {
         textAlign: 'center',
         color: '#49515f',
+        margin: 10,
     },
     button: {
         margin: 10,
