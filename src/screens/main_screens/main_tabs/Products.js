@@ -83,9 +83,7 @@ class Products extends Component {
             }
             else{
                 return <AllProducts
-                            onPressVendorPhoto={() => {this.props.navigation.navigate('ProfileDetails')}}
-                            onPressCard={() => {this.props.navigation.navigate('ProductDetails')}}
-                
+                            navigation = {this.props.navigation}
                         />
             }
         }
