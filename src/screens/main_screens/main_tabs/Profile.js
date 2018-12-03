@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import { 
     StyleSheet,
+    Text,
 } from "react-native";
 import {NavigationActions} from 'react-navigation'
-import { getUserToken, onSignOut } from "../../../AuthMethods";
+import { getUserToken, onSignOut } from "../../../helpers/AuthMethods";
 import axios from 'axios';
 import Error from './screens/Error'
 import HasProfile from './screens/profile/HasProfile'
@@ -19,6 +20,7 @@ class Profile extends Component {
         this.state = {
             token:undefined,
             has_profile: false,
+            profile_type: undefined,
             loaded: false,
             photo: undefined,
             name: '',
@@ -60,6 +62,7 @@ class Profile extends Component {
                     name: response.data.name,
                     photo: response.data.photo,
                     email: response.data.user.email,
+                    profile_type: response.data.profile_type,
                     has_profile: true, 
                     loaded: true,
                 })
@@ -114,6 +117,7 @@ class Profile extends Component {
                                 photo={this.state.photo}
                                 name={this.state.name}
                                 email={this.state.email}
+                                profile_type = {this.state.profile_type}
                                 onPressEditProfile={this.editProfile}
                             />
                 }

@@ -9,7 +9,7 @@ import {
 } from 'native-base';
 import LoginFields from '../components/LoginFields';
 import AwesomeAlert from 'react-native-awesome-alerts';
-import { onSignIn } from "../AuthMethods";
+import { onSignIn } from "../helpers/AuthMethods";
 import axios from 'axios';
 import { API_URL } from 'react-native-dotenv'
 import { BackHandler } from 'react-native';

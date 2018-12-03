@@ -1,6 +1,6 @@
 import React from 'react';
 import { RootNavigator } from './src/Routes';
-import { isSignedIn } from "./src/AuthMethods";
+import { isSignedIn } from "./src/helpers/AuthMethods";
 
 class App extends React.Component {
   state = {

@@ -10,7 +10,7 @@ import {
 } from 'native-base';
 import Field from '../components/Field';
 import AwesomeAlert from 'react-native-awesome-alerts';
-import { getUserToken } from "../AuthMethods";
+import { getUserToken } from "../helpers/AuthMethods";
 import axios from 'axios';
 import { API_URL } from 'react-native-dotenv'
 import { BackHandler } from 'react-native';
@@ -36,10 +36,14 @@ class CreateProfile extends Component {
         };
     }
     componentWillMount() {
-        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+        
         getUserToken()
-        .then(res => this.setState({ token: res }))
-        .catch(err => alert("Erro"));
+        .then(res =>{ 
+            BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+            this.setState({ token: res })
+            
+        })
+        .catch(err => alert(err));
     }
 
     componentWillUnmount() {

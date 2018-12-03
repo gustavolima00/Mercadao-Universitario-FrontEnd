@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { 
     Text,
 } from "react-native";
-import { getUserToken } from "../../../AuthMethods";
+import { getUserToken } from "../../../helpers/AuthMethods";
 import axios from 'axios';
 import Error from './screens/Error'
 import Loading from './screens/Loading'

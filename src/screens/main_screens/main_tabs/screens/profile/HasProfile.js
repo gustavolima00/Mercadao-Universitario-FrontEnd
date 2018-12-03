@@ -6,12 +6,19 @@ import {
     TouchableHighlight,
     Image,
 } from "react-native";
+import { 
+    BUYER,
+    VENDOR_NOT_APPROVED,
+    VENDOR_APPROVED
+} from '../../helpers/Requests'
 
 export default class HasProfile extends Component {
     constructor(props) {
         super(props);
         this.state = {
             photo: 'https://i.imgur.com/UWQ0GOq.png',
+            title:'',
+            message: ''
         };
     }
 
@@ -20,24 +27,39 @@ export default class HasProfile extends Component {
             photo = this.state.photo;
         else
             photo = this.props.photo
+
+        if(this.props.profile_type == VENDOR_NOT_APPROVED){
+            title = 'Vendedor'
+            message = 'Seu perfil de vendedor ainda não foi aprovado Pela nossa equipe, aguarde a aprovação.'
+        }
+        else if(this.props.profile_type == BUYER){
+            title = 'Comprador'
+            message = ''
+        }
+        else if(this.props.profile_type == VENDOR_APPROVED){
+            title = 'Vendedor'
+            message = ''
+        }
         return(
             <View style = {styles.container}>
+                <Text style={styles.title}>{title}</Text>
                 <Image
                     source={{ uri: photo }}
                     style={styles.photo}
                 />
                 <Text style={styles.text}> Nome: {this.props.name} </Text>
                 <Text style={styles.text}> Email: {this.props.email} </Text>
-                <TouchableHighlight onPress={this.props.onPressSignOut} underlayColor="white">
-                    <View style={styles.button}>
-                        <Text style={styles.buttonText}>LOG OUT</Text>
-                    </View>
-                </TouchableHighlight>
                 <TouchableHighlight onPress={this.props.onPressEditProfile} underlayColor="white">
                     <View style={styles.button}>
                         <Text style={styles.buttonText}>Edit Profile</Text>
                     </View>
                 </TouchableHighlight>
+                <TouchableHighlight onPress={this.props.onPressSignOut} underlayColor="white">
+                    <View style={styles.button}>
+                        <Text style={styles.buttonText}>LOG OUT</Text>
+                    </View>
+                </TouchableHighlight>
+                <Text style={styles.text}>{message}</Text>
             </View>
 
         );
@@ -50,6 +72,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         flexDirection: 'column',
         justifyContent: 'space-evenly',
+    },
+    title:{
+        textAlign: 'center',
+        fontSize: 20,
     },
     text: {
         textAlign: 'center',
