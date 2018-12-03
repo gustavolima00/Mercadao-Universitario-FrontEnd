@@ -21,7 +21,7 @@ const MainScreen = createStackNavigator({
     EditProfile:{
         screen:EditProfile,
         navigationOptions: ({ navigation }) => ({
-            header: null,
+            title: 'Edição do perfil',
         }),
     },
 });

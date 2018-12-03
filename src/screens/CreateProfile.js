@@ -15,8 +15,12 @@ import axios from 'axios';
 import { API_URL } from 'react-native-dotenv'
 import { BackHandler } from 'react-native';
 import ImagePicker from 'react-native-image-picker';
+import TypeSelection from '../components/TypeSelection'
 
 DEFAULT_PHOTO='https://i.imgur.com/UWQ0GOq.png'
+BUYER = 1;
+VENDOR_NOT_APPROVED = 2;
+VENDOR_APPROVED = 3;
 
 class CreateProfile extends Component {
     constructor(props) {
@@ -28,6 +32,7 @@ class CreateProfile extends Component {
           token: undefined,
           name_field_alerts:[''],
           name_field_is_bad:false,
+          type : BUYER,
         };
     }
     componentWillMount() {
@@ -80,18 +85,20 @@ class CreateProfile extends Component {
         var self = this;
         if(this.state.photo==DEFAULT_PHOTO){
             var data = {
+                'token': this.state.token,
                 'name': this.state.name,
-                'token': this.state.token, 
+                'profile_type': this.state.type,                
             }
         }
         else{
             var data = {
+                'token': this.state.token,
                 'name': this.state.name,
-                'photo': this.state.photo,
-                'token': this.state.token, 
+                'profile_type': this.state.type,
+                'photo': this.state.photo, 
             }
         }
-        axios.post(creation_profile_path , data                                                                                                 )
+        axios.post(creation_profile_path , data)
         .then (function (response) {
             self.setState({ showLoading: false });
             console.log('response.data', response.data);
@@ -144,6 +151,9 @@ class CreateProfile extends Component {
                     fieldAlert={this.state.name_field_alerts}
                     badInput={this.state.name_field_is_bad}
                     keyExtractor='name'
+                />
+                <TypeSelection
+                    type = {(type) => this.setState({type})}
                 />
                 <View style={styles.buttons}>
                     <TouchableHighlight onPress={this.create_profile} underlayColor="white">

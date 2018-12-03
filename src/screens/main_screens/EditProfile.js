@@ -15,11 +15,11 @@ import axios from 'axios';
 import { API_URL } from 'react-native-dotenv'
 import { BackHandler } from 'react-native';
 import ImagePicker from 'react-native-image-picker';
+import TypeSelection from '../../components/TypeSelection'
 
 class EditProfile extends Component {
     constructor(props) {
         super(props);
-        this.backPressed = this.backPressed.bind(this);
         const {state} = this.props.navigation;
         var DEFAULT_PHOTO = state.params ? state.params.photo : 'https://i.imgur.com/UWQ0GOq.png';
         this.state = {
@@ -31,9 +31,11 @@ class EditProfile extends Component {
         };
     }
     componentWillMount() {
-        BackHandler.addEventListener('hardwareBackPress', this.backPressed);
         getUserToken()
-        .then(res => this.setState({ token: res }))
+        .then(res => {
+            this.setState({ token: res });
+            BackHandler.addEventListener('hardwareBackPress', this.backPressed);
+        })
         .catch(err => alert("Erro"));
     }
 
@@ -42,7 +44,7 @@ class EditProfile extends Component {
     }
 
     backPressed = () => {
-        this.props.navigation.goBack();
+        this.props.navigation.navigate('Profile');
         return true;
     }
 
