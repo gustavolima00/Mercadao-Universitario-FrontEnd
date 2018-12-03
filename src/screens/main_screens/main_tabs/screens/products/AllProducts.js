@@ -60,7 +60,7 @@ class AllProducts extends Component {
                         return (
                             <ProductCard
                                 key={index}
-                                onPressVendorPhoto={() => {this.props.navigation.navigate('ProfileDetails', {userInfo:product.vendor, title: vendor_name})}}
+                                onPressVendorPhoto={() => {this.props.navigation.navigate('ProfileDetails', {user:product.vendor, title: vendor_name})}}
                                 onPressCard={() => {this.props.navigation.navigate('ProductDetails', {product:product, title: product.name})}}
                                 productName={product.name}
                                 vendorName={vendor_name}
