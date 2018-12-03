@@ -85,11 +85,11 @@ class Profile extends Component {
     }
     signOut = async () => {
         onSignOut()
-        this.props.navigation.reset([NavigationActions.navigate({ routeName: 'MainScreen' })], 0)
+        this.props.navigation.reset([NavigationActions.navigate({ routeName: 'TabNavigator' })], 0)
         this.props.navigation.navigate('Login')
     }
     createProfile = async () =>{
-        this.props.navigation.reset([NavigationActions.navigate({ routeName: 'MainScreen' })], 0)
+        this.props.navigation.reset([NavigationActions.navigate({ routeName: 'TabNavigator' })], 0)
         this.props.navigation.navigate('CreateProfile')
     }
     render() {
