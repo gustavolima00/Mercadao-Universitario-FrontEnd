@@ -33,6 +33,11 @@ export default class HasProfile extends Component {
                         <Text style={styles.buttonText}>LOG OUT</Text>
                     </View>
                 </TouchableHighlight>
+                <TouchableHighlight onPress={this.props.onPressEditProfile} underlayColor="white">
+                    <View style={styles.button}>
+                        <Text style={styles.buttonText}>Edit Profile</Text>
+                    </View>
+                </TouchableHighlight>
             </View>
 
         );

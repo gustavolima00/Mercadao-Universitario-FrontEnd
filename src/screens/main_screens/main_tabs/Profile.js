@@ -92,6 +92,10 @@ class Profile extends Component {
         this.props.navigation.reset([NavigationActions.navigate({ routeName: 'TabNavigator' })], 0)
         this.props.navigation.navigate('CreateProfile')
     }
+    editProfile = async () =>{
+        this.props.navigation.reset([NavigationActions.navigate({ routeName: 'TabNavigator' })], 0)
+        this.props.navigation.navigate('EditProfile', { name:this.state.name, photo:this.state.photo })
+    }
     render() {
         if (!this.state.loaded) {
             return <Loading/>
@@ -110,6 +114,7 @@ class Profile extends Component {
                                 photo={this.state.photo}
                                 name={this.state.name}
                                 email={this.state.email}
+                                onPressEditProfile={this.editProfile}
                             />
                 }
                 else{
