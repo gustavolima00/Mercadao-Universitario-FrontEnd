@@ -21,7 +21,7 @@ class AllProducts extends Component {
     componentWillMount(){
         this.loadProducts();
     }
-    loadProducts = async () => {
+    loadProducts(){
         var all_products_path = `${API_URL}/products/all_products/`;
         var self = this;
         axios.get(all_products_path)
@@ -60,6 +60,8 @@ class AllProducts extends Component {
                         return (
                             <ProductCard
                                 key={index}
+                                onPressVendorPhoto={this.props.onPressVendorPhoto}
+                                onPressCard={this.props.onPressCard}
                                 productName={product.name}
                                 vendorName={vendor_name}
                                 vendorPhoto={vendor_photo}

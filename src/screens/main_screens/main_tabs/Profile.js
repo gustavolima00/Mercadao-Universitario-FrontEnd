@@ -3,7 +3,7 @@ import {
     StyleSheet,
 } from "react-native";
 import {NavigationActions} from 'react-navigation'
-import { getUserToken, onSignOut } from "../../AuthMethods";
+import { getUserToken, onSignOut } from "../../../AuthMethods";
 import axios from 'axios';
 import Error from './screens/Error'
 import HasProfile from './screens/profile/HasProfile'
@@ -11,7 +11,6 @@ import Loading from './screens/Loading'
 import NotProfile from './screens/profile/NotProfile'
 import { API_URL } from 'react-native-dotenv'
 import { BackHandler } from 'react-native';
-
 
 class Profile extends Component {
     constructor(props) {

@@ -1,15 +1,11 @@
 import React, { Component } from 'react';
-import { Image } from 'react-native';
+import { Image , TouchableHighlight} from 'react-native';
 import { 
-    Container, 
-    Header, 
     Content, 
     Card, 
     CardItem, 
     Thumbnail, 
     Text, 
-    Button, 
-    Icon, 
     Left, 
     Body, 
     Right 
@@ -22,16 +18,20 @@ class ProductCard extends Component {
                 <Card>
                   <CardItem>
                     <Left>
-                      <Thumbnail source={{uri: this.props.vendorPhoto}} />
+                      <TouchableHighlight onPress={this.props.onPressVendorPhoto} underlayColor="white">
+                        <Thumbnail source={{uri: this.props.vendorPhoto}} />
+                      </TouchableHighlight>
                       <Body>
                         <Text>{this.props.productName}</Text>
                         <Text note>{this.props.vendorName}</Text>
                       </Body>
                     </Left>
                   </CardItem>
-                  <CardItem cardBody>
-                    <Image source={{uri: this.props.productPhoto}} style={{height: 200, width: null, flex: 1}}/>
-                  </CardItem>
+                  <TouchableHighlight onPress={this.props.onPressCard} underlayColor="white">
+                    <CardItem cardBody>
+                      <Image source={{uri: this.props.productPhoto}} style={{height: 200, width: null, flex: 1}}/>
+                    </CardItem>
+                  </TouchableHighlight>
                   <CardItem>
                     <Left>
                     </Left>
