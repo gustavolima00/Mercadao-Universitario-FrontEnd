@@ -10,8 +10,16 @@ import {
     KeyboardAvoidingView,
 } from "react-native";
 import { 
-    Text, 
+    Container, 
+    Header, 
+    Content, 
+    Form, 
+    Item, 
+    Input, 
+    Label,
+    Text
 } from 'native-base';
+
 import { getUserToken } from '../../../helpers/AuthMethods'
 import Field from '../../../components/Field'
 import ImagePicker from 'react-native-image-picker';
@@ -137,7 +145,7 @@ export default class CreateProduct extends Component {
         .catch(function (error) {
             console.log('error', error);
             if(error.response)
-                self.setState({ showAlert: true , title:'Erro', message:'Um ou mais campos vazios'});
+                self.setState({ showAlert: true , title:'Erro', message:'Todos os campos devem ser preenchidos. O campo de preço deve conter ponto e não vírgula'});
             else
                 self.setState({ showAlert: true , title:'Erro', message:'Erro de conexão. Tente novamente'});
             self.setState({ showLoading: false });
@@ -158,16 +166,30 @@ export default class CreateProduct extends Component {
                 <TouchableHighlight onPress={this.update_photo}>
                     <Animated.Image source={{uri: photo}} style={[styles.photo, { height: this.imageHeight }]}/>
                 </TouchableHighlight>
-                <Field
-                    placeholder={'Nome do Produto'}
-                    onChangeText={(name) => {
-                        this.setState({name})
-                    }}
-                    keyExtractor={null}
-                />
+                <Text style={styles.info}> Clique na imagem para editala </Text>
+                <Form>
+                    <Item stackedLabel>
+                        <Label>Nome</Label>
+                        <Input 
+                            onChangeText={(name) => {
+                                this.setState({name})
+                            }}
+                        />
+                    </Item>
+                    <Item stackedLabel last>
+                        <Label>Preço</Label>
+                        <Input 
+                            onChangeText={(price) => {
+                                this.setState({price})
+                            }}
+                            keyboardType='numeric'
+                        />
+                    </Item>
+                    <Text style={styles.info} > O campo de preço deve conter ponto, e não vírgula </Text>
+                </Form>
                 <TouchableHighlight onPress={this.createProduct} underlayColor="white">
                     <View style={styles.button}>
-                        <Text style={styles.buttonText} >REGISTRO</Text>
+                        <Text style={styles.buttonText}> Criar Produto </Text>
                     </View>
                 </TouchableHighlight>
                 <AwesomeAlert
@@ -209,7 +231,7 @@ const styles = StyleSheet.create({
         flex: 1
     },
     button: {
-        margin: 2,
+        margin: 10,
         //height: 50,
         width: 100,
         alignItems: 'center',
@@ -223,6 +245,12 @@ const styles = StyleSheet.create({
         paddingTop: 12,
         paddingBottom: 12,
         color: 'white',
+        //fontWeight: 'bold',
+    },
+    info: {
+        fontSize: 12,
+        paddingBottom: 12,
+        //color: 'white',
         //fontWeight: 'bold',
     },
 });
