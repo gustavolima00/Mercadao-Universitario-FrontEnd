@@ -10,9 +10,7 @@ import {
     KeyboardAvoidingView,
 } from "react-native";
 import { 
-    Container, 
-    Header, 
-    Content, 
+    CardItem, 
     Form, 
     Item, 
     Input, 
@@ -27,16 +25,16 @@ import AwesomeAlert from 'react-native-awesome-alerts';
 import { API_URL } from 'react-native-dotenv'
 import axios from 'axios';
 
-const DEFAULT_PHOTO='https://bigriverequipment.com/wp-content/uploads/2017/10/no-photo-available.png'
 const IMAGE_HEIGHT = 300
 const IMAGE_HEIGHT_SMALL=50
 
-export default class CreateProduct extends Component {
+export default class EditProduct extends Component {
 
     constructor(props) {
         super(props)
+        const {state} = this.props.navigation;
         this.state = {
-            token:undefined,
+            token: state.params ? state.params.token : undefined,
             name: undefined,
             price: undefined,
             photo: undefined,
@@ -71,7 +69,7 @@ export default class CreateProduct extends Component {
     }
     showAlert = () => {
         this.setState({
-            showAlert: true
+            showAlert: true,
         });
     };
     
@@ -123,10 +121,12 @@ export default class CreateProduct extends Component {
           });
     }
 
-    createProduct = async () => {
+    editProduct = async () => {
         //this.setState({ showAlert: false });
+        const {state} = this.props.navigation;
+        var product = state.params ? state.params.product : undefined
         this.setState({ showLoading: true });
-        const create_product_path = `${API_URL}/products/create_product/`;
+        const create_product_path = `${API_URL}/products/edit_product/`;
 
         var self = this;
         axios.post(create_product_path ,{
@@ -134,19 +134,20 @@ export default class CreateProduct extends Component {
             'name': this.state.name,
             'price': this.state.price,
             'photo': this.state.photo,
+            'product_id': product.id
         })
         .then (function (response) {
             self.setState({ showLoading: false });
             console.log('response.data', response.data);
             console.log('response.status', response.status);
             if(response.status>= 200 && response.status<300){
-                self.setState({ showSucess: true });  
+                self.setState({ showSucess: true });   
             }
         })
         .catch(function (error) {
             console.log('error', error);
             if(error.response)
-                self.setState({ showAlert: true , title:'Erro', message:'Todos os campos devem ser preenchidos. O campo de preço deve conter ponto e não vírgula'});
+                self.setState({ showAlert: true , title:'Erro', message:'Erro na requisição. Atenção, o campo de preço deve conter ponto e não vírgula'});
             else
                 self.setState({ showAlert: true , title:'Erro', message:'Erro de conexão. Tente novamente'});
             self.setState({ showLoading: false });
@@ -155,22 +156,30 @@ export default class CreateProduct extends Component {
     }
     
     render() {
+        const {state} = this.props.navigation;
+        var product = state.params ? state.params.product : undefined
+        var DEFAULT_PHOTO = product.photo ? product.photo : 'https://bigriverequipment.com/wp-content/uploads/2017/10/no-photo-available.png';
+        var name = product.name ? product.name : undefined
+        var price = product.price ? product.price : undefined
         if(this.state.photo)
             photo=this.state.photo
         else    
             photo=DEFAULT_PHOTO
+
         return (
             <KeyboardAvoidingView
                 style={styles.container}
                 behavior="padding"
             >
                 <TouchableHighlight onPress={this.update_photo}>
-                    <Animated.Image source={{uri: photo}} style={[styles.photo, { height: this.imageHeight }]}/>
+                    <CardItem>
+                        <Animated.Image source={{uri: photo}} style={[styles.photo, { height: this.imageHeight }]}/>
+                    </CardItem>
                 </TouchableHighlight>
                 <Text style={styles.info}> Clique na imagem para editala </Text>
                 <Form>
                     <Item stackedLabel>
-                        <Label>Nome</Label>
+                        <Label>Nome (Nome antigo {name})</Label>
                         <Input 
                             onChangeText={(name) => {
                                 this.setState({name})
@@ -178,8 +187,8 @@ export default class CreateProduct extends Component {
                         />
                     </Item>
                     <Item stackedLabel last>
-                        <Label>Preço</Label>
-                        <Input 
+                        <Label>Preço (Valor antigo: {price})</Label>
+                        <Input
                             onChangeText={(price) => {
                                 this.setState({price})
                             }}
@@ -188,9 +197,9 @@ export default class CreateProduct extends Component {
                     </Item>
                     <Text style={styles.info} > O campo de preço deve conter ponto, e não vírgula </Text>
                 </Form>
-                <TouchableHighlight onPress={this.createProduct} underlayColor="white">
+                <TouchableHighlight onPress={this.editProduct} underlayColor="white">
                     <View style={styles.button}>
-                        <Text style={styles.buttonText}> Criar Produto </Text>
+                        <Text style={styles.buttonText}> Editar Produto </Text>
                     </View>
                 </TouchableHighlight>
                 <AwesomeAlert
@@ -217,7 +226,7 @@ export default class CreateProduct extends Component {
                     title={'Sucesso'}
                     closeOnTouchOutside={false}
                     closeOnHardwareBackPress={false}
-                    message={'Produto criado com sucesso'}
+                    message={'Produto editado com sucesso'}
                     showCancelButton
                     cancelText="OK"
                     onCancelPressed={() => {
@@ -237,7 +246,8 @@ const styles = StyleSheet.create({
         width: '100%',
     },
     photo:{
-        padding: 20
+        padding: 5,
+        flex: 1,
     },
     photo_container:{
         height: 100,
