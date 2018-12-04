@@ -25,8 +25,8 @@ import AwesomeAlert from 'react-native-awesome-alerts';
 import { API_URL } from 'react-native-dotenv'
 import axios from 'axios';
 
-const IMAGE_HEIGHT = 300
-const IMAGE_HEIGHT_SMALL=50
+const IMAGE_HEIGHT = 250
+const IMAGE_HEIGHT_SMALL=30
 
 export default class EditProduct extends Component {
 
@@ -38,9 +38,10 @@ export default class EditProduct extends Component {
             name: undefined,
             price: undefined,
             photo: undefined,
-            showLoading: false, showAlert:false, showSucess:false,
+            showLoading: false, showAlert:false, showSucess:false, showError:false,
             title:undefined,
-            message:undefined,
+            error_message:undefined,
+            sucess_message:undefined,
         }
         this.imageHeight = new Animated.Value(IMAGE_HEIGHT);
     }
@@ -69,14 +70,15 @@ export default class EditProduct extends Component {
     }
     showAlert = () => {
         this.setState({
-            showAlert: true,
+            showError: true,
         });
     };
     
     hideAlert = () => {
         this.setState({
-            showAlert: false,
+            showError: false,
             showSucess: false,
+            showAlert: false,
         });
     };
     _keyboardDidShow = (event) => {
@@ -141,20 +143,51 @@ export default class EditProduct extends Component {
             console.log('response.data', response.data);
             console.log('response.status', response.status);
             if(response.status>= 200 && response.status<300){
-                self.setState({ showSucess: true });   
+                self.setState({ showSucess: true , sucess_message: 'Produto editado com sucesso'});   
             }
         })
         .catch(function (error) {
             console.log('error', error);
             if(error.response)
-                self.setState({ showAlert: true , title:'Erro', message:'Erro na requisição. Atenção, o campo de preço deve conter ponto e não vírgula'});
+                self.setState({ showError: true , title:'Erro', error_message:'Erro na requisição. Atenção, o campo de preço deve conter ponto e não vírgula'});
             else
-                self.setState({ showAlert: true , title:'Erro', message:'Erro de conexão. Tente novamente'});
+                self.setState({ showError: true , title:'Erro', error_message:'Erro de conexão. Tente novamente'});
             self.setState({ showLoading: false });
             setTimeout(() => {}, 50);
 		})
     }
     
+    deleteProduct = async () => {
+        //this.setState({ showAlert: false });
+        const {state} = this.props.navigation;
+        var product = state.params ? state.params.product : undefined
+        this.setState({ showLoading: true });
+        const delete_product_path = `${API_URL}/products/delete_product/`;
+
+        var self = this;
+        axios.post(delete_product_path ,{
+            'token': this.state.token,
+            'product_id': product.id
+        })
+        .then (function (response) {
+            self.setState({ showLoading: false });
+            console.log('response.data', response.data);
+            console.log('response.status', response.status);
+            if(response.status>= 200 && response.status<300){
+                self.setState({ showSucess: true , sucess_message: 'Produto deletado com sucesso'});   
+            }
+        })
+        .catch(function (error) {
+            console.log('error', error);
+            if(error.response)
+                self.setState({ showError: true , title:'Erro', error_message:'Erro inesperado. Tente novamente'});
+            else
+                self.setState({ showError: true , title:'Erro', error_message:'Erro de conexão. Tente novamente'});
+            self.setState({ showLoading: false });
+            setTimeout(() => {}, 50);
+		})
+    }
+
     render() {
         const {state} = this.props.navigation;
         var product = state.params ? state.params.product : undefined
@@ -197,11 +230,18 @@ export default class EditProduct extends Component {
                     </Item>
                     <Text style={styles.info} > O campo de preço deve conter ponto, e não vírgula </Text>
                 </Form>
-                <TouchableHighlight onPress={this.editProduct} underlayColor="white">
-                    <View style={styles.button}>
-                        <Text style={styles.buttonText}> Editar Produto </Text>
-                    </View>
-                </TouchableHighlight>
+                <View style={styles.buttons}>
+                    <TouchableHighlight onPress={this.editProduct} underlayColor="white">
+                        <View style={styles.button}>
+                            <Text style={styles.buttonText}> Editar Produto </Text>
+                        </View>
+                    </TouchableHighlight>
+                    <TouchableHighlight onPress={() => this.setState({showAlert:true})} underlayColor="white">
+                        <View style={styles.delete_button}>
+                            <Text style={styles.buttonText}> Deletar produto </Text>
+                        </View>
+                    </TouchableHighlight>
+                </View>
                 <AwesomeAlert
                     show={this.state.showLoading}
                     closeOnTouchOutside={false}
@@ -210,11 +250,11 @@ export default class EditProduct extends Component {
                     showProgress
                 />
                 <AwesomeAlert
-                    show={this.state.showAlert}
+                    show={this.state.showError}
                     title={this.state.title}
                     closeOnTouchOutside={false}
                     closeOnHardwareBackPress={false}
-                    message={this.state.message}
+                    message={this.state.error_message}
                     showCancelButton
                     cancelText="OK"
                     onCancelPressed={() => {
@@ -226,12 +266,31 @@ export default class EditProduct extends Component {
                     title={'Sucesso'}
                     closeOnTouchOutside={false}
                     closeOnHardwareBackPress={false}
-                    message={'Produto editado com sucesso'}
+                    message={this.state.sucess_message}
                     showCancelButton
                     cancelText="OK"
                     onCancelPressed={() => {
                         this.hideAlert();
                         this.props.navigation.navigate('Profile');
+                    }}
+                />
+                <AwesomeAlert
+                    show={this.state.showAlert}
+                    title="Alerta"
+                    message="Você tem certeza que deseja deltar o produto?"
+                    closeOnTouchOutside={false}
+                    closeOnHardwareBackPress={false}
+                    showCancelButton={true}
+                    showConfirmButton={true}
+                    cancelText="Não, Voltar"
+                    confirmText="Sim, Deletar"
+                    confirmButtonColor="#DD6B55"
+                    onCancelPressed={() => {
+                        this.hideAlert();
+                    }}
+                    onConfirmPressed={() => {
+                        this.hideAlert();
+                        this.deleteProduct();
                     }}
                 />
             </KeyboardAvoidingView>
@@ -249,6 +308,12 @@ const styles = StyleSheet.create({
         padding: 5,
         flex: 1,
     },
+    buttons: {
+        //flex: 1,
+        //alignItems: 'center',
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+    },
     photo_container:{
         height: 100,
         width: null,
@@ -260,6 +325,16 @@ const styles = StyleSheet.create({
         width: 100,
         alignItems: 'center',
         backgroundColor: '#49515f',
+        borderRadius: 2,
+        //borderWidth: 1,
+        //borderColor: 'black'
+    },
+    delete_button: {
+        margin: 10,
+        //height: 50,
+        width: 130,
+        alignItems: 'center',
+        backgroundColor: 'red',
         borderRadius: 2,
         //borderWidth: 1,
         //borderColor: 'black'
