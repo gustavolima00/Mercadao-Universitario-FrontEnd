@@ -12,7 +12,7 @@ import {
     VENDOR_APPROVED
 } from '../../helpers/Requests'
 
-export default class HasProfile extends Component {
+export default class BuyerProfile extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -28,21 +28,9 @@ export default class HasProfile extends Component {
         else
             photo = this.props.photo
 
-        if(this.props.profile_type == VENDOR_NOT_APPROVED){
-            title = 'Vendedor'
-            message = 'Seu perfil de vendedor ainda não foi aprovado Pela nossa equipe, aguarde a aprovação.'
-        }
-        else if(this.props.profile_type == BUYER){
-            title = 'Comprador'
-            message = ''
-        }
-        else if(this.props.profile_type == VENDOR_APPROVED){
-            title = 'Vendedor'
-            message = ''
-        }
         return(
             <View style = {styles.container}>
-                <Text style={styles.title}>{title}</Text>
+                <Text style={styles.title}>Comprador</Text>
                 <Image
                     source={{ uri: photo }}
                     style={styles.photo}

@@ -8,14 +8,14 @@ import {
 import { 
     Text, 
 } from 'native-base';
-import Field from '../../components/Field';
+import Field from '../../../components/Field';
 import AwesomeAlert from 'react-native-awesome-alerts';
-import { getUserToken } from "../../helpers/AuthMethods";
+import { getUserToken } from "../../../helpers/AuthMethods";
 import axios from 'axios';
 import { API_URL } from 'react-native-dotenv'
 import { BackHandler } from 'react-native';
 import ImagePicker from 'react-native-image-picker';
-import TypeSelection from '../../components/TypeSelection'
+import TypeSelection from '../../../components/TypeSelection'
 
 class EditProfile extends Component {
     constructor(props) {

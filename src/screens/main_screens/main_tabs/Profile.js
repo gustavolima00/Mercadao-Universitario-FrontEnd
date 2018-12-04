@@ -7,11 +7,17 @@ import {NavigationActions} from 'react-navigation'
 import { getUserToken, onSignOut } from "../../../helpers/AuthMethods";
 import axios from 'axios';
 import Error from './screens/Error'
-import HasProfile from './screens/profile/HasProfile'
+import BuyerProfile from './screens/profile/BuyerProfile'
+import VendorProfile from './screens/profile/VendorProfile'
 import Loading from './screens/Loading'
 import NotProfile from './screens/profile/NotProfile'
 import { API_URL } from 'react-native-dotenv'
 import { BackHandler } from 'react-native';
+import { 
+    BUYER,
+    VENDOR_NOT_APPROVED,
+    VENDOR_APPROVED
+} from './helpers/Requests'
 
 class Profile extends Component {
     constructor(props) {
@@ -118,14 +124,28 @@ class Profile extends Component {
             }
             else{
                 if(this.state.has_profile){
-                    return <HasProfile
-                                onPressSignOut={this.signOut}
-                                photo={this.state.photo}
-                                name={this.state.name}
-                                email={this.state.email}
-                                profile_type = {this.state.profile_type}
-                                onPressEditProfile={this.editProfile}
-                            />
+                    if(this.state.profile_type == BUYER)
+                        return <BuyerProfile
+                                    onPressSignOut={this.signOut}
+                                    photo={this.state.photo}
+                                    name={this.state.name}
+                                    email={this.state.email}
+                                    profile_type = {this.state.profile_type}
+                                    onPressEditProfile={this.editProfile}
+                                />
+                    else if(this.state.profile_type == VENDOR_NOT_APPROVED || this.state.profile_type == VENDOR_APPROVED){
+                        return <VendorProfile
+                                    onPressSignOut={this.signOut}
+                                    photo={this.state.photo}
+                                    name={this.state.name}
+                                    email={this.state.email}
+                                    profile_type = {this.state.profile_type}
+                                    navigation = {this.props.navigation}
+                                />
+                    }
+                    else{
+                        return <Text>profile_type :{this.state.profile_type}</Text>
+                    }
                 }
                 else{
                     return <NotProfile
