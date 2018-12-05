@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { 
     View, 
     StyleSheet,
+    updateLocation,
 } from "react-native";
 import LoginButtons from '../components/LoginButtons';
 import LoginFields from '../components/LoginFields';

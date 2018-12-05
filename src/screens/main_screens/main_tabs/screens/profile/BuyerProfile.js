@@ -17,8 +17,6 @@ export default class BuyerProfile extends Component {
         super(props);
         this.state = {
             photo: 'https://i.imgur.com/UWQ0GOq.png',
-            title:'',
-            message: ''
         };
     }
 
@@ -47,7 +45,6 @@ export default class BuyerProfile extends Component {
                         <Text style={styles.buttonText}>LOG OUT</Text>
                     </View>
                 </TouchableHighlight>
-                <Text style={styles.text}>{message}</Text>
             </View>
 
         );
