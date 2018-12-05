@@ -4,13 +4,21 @@ import {
 	StyleSheet,
 	ScrollView,
     RefreshControl,
-    Text
 } from 'react-native';
+import { 
+    Container, 
+    Header, 
+    Item, 
+    Input, 
+    Icon, 
+    Button, 
+    Text 
+} from 'native-base';
 import axios from 'axios';
-import { API_URL } from 'react-native-dotenv'
-import ProductCard from '../../components/ProductCard'
+import { API_URL } from 'react-native-dotenv';
+import ProductCard from '../../components/ProductCard';
 
-class AllProducts extends Component {
+export default class VendorAllProducts extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -39,6 +47,24 @@ class AllProducts extends Component {
             alert(error);
         })
     }
+    searchProducts(input){
+        var search_products_path = `${API_URL}/products/search_products/`;
+        var self = this;
+        axios.post(search_products_path, {'name':input})
+        .then (function (response) {
+            self.setState({ refreshing: false });
+            console.log('response.data', response.data);
+            console.log('response.status', response.status);
+            if(response.status>= 200 && response.status<300){
+                self.setState({ products: response.data });
+            }
+        })
+        .catch(function (error) {
+            console.log('error', error);
+            self.setState({ refreshing: false });
+            alert(error);
+        })
+    }
     refreshProducts = async () => {
 		this.setState({ refreshing: true });
 		this.loadProducts();
@@ -47,6 +73,20 @@ class AllProducts extends Component {
         if(this.state.products.length>0)
             return (
                 <View style={styles.container}>
+                    <Header searchBar rounded>
+                        <Item>
+                            <Icon name="ios-search" />
+                            <Input 
+                                placeholder="Pesquisar" 
+                                onChangeText={(name) => {
+                                    this.searchProducts(name)
+                                }}
+                            />
+                        </Item>
+                        <Button>
+                            <Text>Pesquisar</Text>
+                        </Button>
+                    </Header>
                     <ScrollView
                         refreshControl={
                             <RefreshControl
@@ -77,6 +117,20 @@ class AllProducts extends Component {
         else 
             return (
                 <View style={styles.container}>
+                    <Header searchBar rounded>
+                        <Item>
+                            <Icon name="ios-search" />
+                            <Input 
+                                placeholder="Pesquisar" 
+                                onChangeText={(name) => {
+                                    this.searchProducts(name)
+                                }}
+                            />
+                        </Item>
+                        <Button>
+                            <Text>Pesquisar</Text>
+                        </Button>
+                    </Header>
                     <ScrollView
                         refreshControl={
                             <RefreshControl
@@ -85,15 +139,13 @@ class AllProducts extends Component {
                             />
                         }
                     >
-                    <Text style={styles.text}> Não foram encontrados produtos proximos a você :( </Text>
-                    <Text style={styles.text}> Deslise para baixo para atualizar </Text>
+                    <Text style={styles.text}> Não foram encontrados produtos :(</Text>
                     </ScrollView>
                 </View>
             );
 	}
 
 }
-export default AllProducts;
 const styles = StyleSheet.create({
     container: {
         flex: 1,

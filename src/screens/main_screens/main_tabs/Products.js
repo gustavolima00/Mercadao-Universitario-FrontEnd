@@ -6,7 +6,8 @@ import { getUserToken } from "../../../helpers/AuthMethods";
 import axios from 'axios';
 import Error from './screens/Error'
 import Loading from './screens/Loading'
-import AllProducts from './screens/products/AllProducts'
+import BuyerAllProducts from './screens/products/BuyerAllProducts'
+import VendorAllProducts from './screens/products/VendorAllProducts'
 import { API_URL } from 'react-native-dotenv'
 import { BackHandler } from 'react-native';
 
@@ -18,6 +19,7 @@ class Products extends Component {
         this.state = {
             token:undefined,
             has_profile: false,
+            profile_type: undefined,
             loaded: false,
             has_error:false,
             error: 'Sem conexão',
@@ -51,7 +53,11 @@ class Products extends Component {
             console.log('response.data', response.data);
             console.log('response.status', response.status);
             if(response.status>= 200 && response.status<300){
-                self.setState({ has_profile: true, loaded: true })
+                self.setState({ 
+                    profile_type: response.data.profile_type,
+                    has_profile: true, 
+                    loaded: true,
+                })
             }
         })
         .catch(function (error) {
@@ -88,9 +94,26 @@ class Products extends Component {
                         />     
             }
             else{
-                return <AllProducts
-                            navigation = {this.props.navigation}
-                        />
+                if(this.state.has_profile){
+                    if(this.state.profile_type == BUYER){
+                        return <BuyerAllProducts
+                                    navigation = {this.props.navigation}
+                                />
+                    }
+                    else if(this.state.profile_type == VENDOR_NOT_APPROVED || this.state.profile_type == VENDOR_APPROVED){
+                        return <VendorAllProducts
+                                    navigation = {this.props.navigation}
+                                />
+                    }
+                    else{
+                        return <Text>profile_type :{this.state.profile_type}</Text>
+                    }
+                }
+                else{
+                    return <BuyerAllProducts
+                                navigation = {this.props.navigation}
+                            />
+                }
             }
         }
     }

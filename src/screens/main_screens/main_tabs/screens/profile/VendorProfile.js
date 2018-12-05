@@ -25,17 +25,22 @@ export default class VendorProfile extends Component {
             products: [''],
             refreshing: true,
             token:undefined,
+            name: undefined,
+            photo: undefined,
+            email: undefined,
+            profile_type: undefined,
         };
     }
     componentWillMount(){
-        this.loadProducts();
+        this.loadScreen();
     }
-     loadProducts = async () => {
+    loadScreen = async () => {
         await getUserToken()
         .then(res => {
             this.setState({ token: res });
         })
         var all_products_path = `${API_URL}/products/user_products/`;
+        var get_profile_path = `${API_URL}/profiles/update_profile/`;
         var self = this;
         axios.post(all_products_path, {'token':this.state.token})
         .then (function (response) {
@@ -51,18 +56,33 @@ export default class VendorProfile extends Component {
             self.setState({ refreshing: false });
             alert(error);
         })
+        axios.post(get_profile_path , {'token':this.state.token})
+        .then (function (response) {
+            self.setState({ showLoading: false });
+            console.log('response.data', response.data);
+            console.log('response.status', response.status);
+            if(response.status>= 200 && response.status<300){
+                self.setState({ 
+                    name: response.data.name,
+                    photo: response.data.photo,
+                    email: response.data.user.email,
+                    profile_type: response.data.profile_type,
+                })
+            }
+        })
+        .catch(function (error) {
+            console.log('error', error);
+            alert(error)
+        })
     }
     refreshProducts = async () => {
 		this.setState({ refreshing: true });
-		this.loadProducts();
+		this.loadScreen();
 	}
     render(){
-
-        if(this.props.profile_type == VENDOR_NOT_APPROVED){
+        message = ''
+        if(this.state.profile_type == VENDOR_NOT_APPROVED){
             message = 'Seu perfil de vendedor ainda não foi aprovado Pela nossa equipe, aguarde a aprovação.'
-        }
-        else if(this.props.profile_type == VENDOR_APPROVED){
-            message = ''
         }
         return(
             <View style = {styles.container}>
@@ -77,13 +97,13 @@ export default class VendorProfile extends Component {
                 >
                 <Text style={styles.title}> Vendedor </Text>
                 <Image
-                    source={{ uri: this.props.photo }}
+                    source={{ uri: this.state.photo }}
                     style={styles.photo}
                 />
-                <Text style={styles.text}> Nome: {this.props.name} </Text>
-                <Text style={styles.text}> Email: {this.props.email} </Text>
+                <Text style={styles.text}> Nome: {this.state.name} </Text>
+                <Text style={styles.text}> Email: {this.state.email} </Text>
                 <View style={styles.buttons}>
-                    <TouchableHighlight onPress={() => this.props.navigation.navigate('EditProfile', { name:this.props.name, photo:this.props.photo})} underlayColor="white">
+                    <TouchableHighlight onPress={() => this.props.navigation.navigate('EditProfile', { name:this.state.name, photo:this.state.photo})} underlayColor="white">
                         <View style={styles.button}>
                             <Text style={styles.buttonText}>Edit Profile</Text>
                         </View>

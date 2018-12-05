@@ -28,11 +28,11 @@ class Profile extends Component {
             has_profile: false,
             profile_type: undefined,
             loaded: false,
+            has_error:false,
+            error: 'Sem conexão',
             photo: undefined,
             name: '',
             email: '',
-            has_error:false,
-            error: 'Sem conexão',
         }
     }
     
@@ -136,10 +136,6 @@ class Profile extends Component {
                     else if(this.state.profile_type == VENDOR_NOT_APPROVED || this.state.profile_type == VENDOR_APPROVED){
                         return <VendorProfile
                                     onPressSignOut={this.signOut}
-                                    photo={this.state.photo}
-                                    name={this.state.name}
-                                    email={this.state.email}
-                                    profile_type = {this.state.profile_type}
                                     navigation = {this.props.navigation}
                                 />
                     }
