@@ -7,7 +7,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "axios": "^0.18.1",
+    "axios": "^0.21.1",
     "enzyme": "^3.7.0",
     "enzyme-to-json": "^3.3.4",
     "native-base": "^2.8.1",
